@@ -3,6 +3,11 @@
 
 ## INSTALAÇÃO
 
+### Clonar o projeto
+```bash
+$ git clone linkDoRepositorio
+```
+
 ### Após clonar o projeto, rodar comando abaixo
 ```bash
 $ npm install
