@@ -1,11 +1,14 @@
 import React from 'react';
-import { StyleSheet, Text, View,SafeAreaView,TextInput,TouchableOpacity } from 'react-native';
+import LoginPNG from '../../../assets/LogoLogin.png'
+import { StyleSheet, Text, View,SafeAreaView,TextInput,TouchableOpacity,Image } from 'react-native';
  
 function LoginScreen() {
   const [inputLogin,onChangeText] =React.useState('');
-
+  
   return (
+    
     <View style={styles.container}>
+      <Image style={styles.LoginPNG} source={LoginPNG} />
         <TextInput style={styles.input} placeholder='Usuário' onChangeText={onChangeText} value={inputLogin}/>
         <TextInput style={styles.input} placeholder='Senha'   onChangeText={onChangeText} value={inputLogin}/>
         <TouchableOpacity style={styles.buttonLogin}>
@@ -17,15 +20,22 @@ function LoginScreen() {
 
 const styles = StyleSheet.create({
   container:{
-    flex: 1,padding:24,backgroundColor:'#fff',alignItems: 'center', justifyContent: 'center',
+    flex: 1,padding:24,backgroundColor:'#fff',alignItems: 'center', 
   },
   
   input:{
-    width:'100%',margin:12,borderRadius:16,padding: 16,backgroundColor:'#e3e3e3'
+    width:'90%',margin:12,borderRadius:16,padding: 14,backgroundColor:'#e3e3e3'
   },
   buttonLogin:{
     alignItems: 'center', justifyContent: 'center',
-    width:'100%',margin:12,borderRadius:16,padding:12 ,backgroundColor:'#ffbc0d'
+    width:'90%',margin:12,borderRadius:16,padding:20 ,backgroundColor:'#ffbc0d'
+  },
+  LoginPNG:{
+    width:'100%',
+    height:'30%',
+    marginBottom:'10%',
+    marginTop:'20%',
+    resizeMode: 'contain',
   }
 
 })
