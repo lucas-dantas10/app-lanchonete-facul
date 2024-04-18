@@ -1,16 +1,18 @@
 import React from 'react';
+import {useState} from 'react'
 import LoginPNG from '../../../assets/LogoLogin.png'
-import { StyleSheet, Text, View,SafeAreaView,TextInput,TouchableOpacity,Image } from 'react-native';
+import { StyleSheet, Text, View,SafeAreaView,TextInput,TouchableOpacity,Image} from 'react-native';
  
 function LoginScreen() {
-  const [inputLogin,onChangeText] =React.useState('');
+  const [inputLogin,onChangeUsuario] = useState('');
+  const [inputSenha,onChangeSenha] = useState('');
   
   return (
     
     <View style={styles.container}>
       <Image style={styles.LoginPNG} source={LoginPNG} />
-        <TextInput style={styles.input} placeholder='Usuário' onChangeText={onChangeText} value={inputLogin}/>
-        <TextInput style={styles.input} placeholder='Senha'   onChangeText={onChangeText} value={inputLogin}/>
+        <TextInput style={styles.input} placeholder='Usuário' onChangeText={onChangeUsuario} value={inputLogin}/>
+        <TextInput style={styles.input} placeholder='Senha'   onChangeText={onChangeSenha} value={inputSenha}/>
         <TouchableOpacity style={styles.buttonLogin}>
           <Text>Login</Text>
         </TouchableOpacity>
