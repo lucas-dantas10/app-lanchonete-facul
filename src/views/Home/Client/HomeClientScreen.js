@@ -1,8 +1,10 @@
 import React from "react";
-
+import {
+    Text,
+  } from "react-native";
 function HomeClientScreen() {
     return (
-        <h1>HOME CLIENT TESTE</h1>
+        <Text>HOME CLIENT TESTE</Text>
         
     );
 }
