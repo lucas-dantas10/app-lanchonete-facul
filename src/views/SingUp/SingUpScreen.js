@@ -9,11 +9,11 @@ import { StyleSheet,
   import LoginPNG from "./assets/LogoLogin.png";
 
   function SingUpscreen() {
-  const [inputNome, onChangeNome] = useState("");
-  const [inputEscola, onChangeEscola] = useState("Selecione sua escola");
-  const [inputUsuario, onChangeUsuario] = useState("");
-  const [inputSenha, onChangeSenha] = useState("");
-  const [inputSenha2, onChangeSenha2] = useState("");
+  const [inputName, setName] = useState("");
+  const [inputSchool, setSchool] = useState("Selecione sua escola");
+  const [inputUser, setUser] = useState("");
+  const [inputPassword, setPassword] = useState("");
+  const [inputPasswordTwo, setPasswordTwo] = useState("");
 
   return (
     <View style={styles.container}>
@@ -22,15 +22,15 @@ import { StyleSheet,
       <TextInput
         style={styles.input}
         placeholder="Nome"
-        onChangeText={onChangeNome}
-        value={inputNome}
+        onChangeText={setName}
+        value={inputName}
       />
      <Picker style={styles.input}
-        inputEscola={onChangeEscola}
+        inputEscola={setSchool}
         onValueChange={(itemValue, itemIndex) =>
-            onChangeEscola(itemValue)
+            setSchool(itemValue)
         }>
-        <Picker.Item label={inputEscola} value="" />
+        <Picker.Item label={inputSchool} value="" />
         <Picker.Item label="Escola 1" value="Escola 1" key={0}/>
         <Picker.Item label="Escola 2" value="Escola 2" key={1}/>
         <Picker.Item label="Escola 3" value="Escola 3" key={2}/>
@@ -38,20 +38,20 @@ import { StyleSheet,
       <TextInput
         style={styles.input}
         placeholder="Usuário"
-        onChangeText={onChangeUsuario}
-        value={inputUsuario}
+        onChangeText={setUser}
+        value={inputUser}
       />
       <TextInput
         style={styles.input}
         placeholder="Senha"
-        onChangeText={onChangeSenha}
-        value={inputSenha}
+        onChangeText={setPassword}
+        value={inputPassword}
       />
       <TextInput
         style={styles.input}
         placeholder="Confirme sua senha"
-        onChangeText={onChangeSenha2}
-        value={inputSenha2}
+        onChangeText={setPasswordTwo}
+        value={inputPasswordTwo}
       />
       <TouchableOpacity style={styles.buttonLogin}>
         <Text>Cadastre-se</Text>
