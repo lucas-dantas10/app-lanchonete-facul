@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from "./src/views/Login/LoginScreen.js";
 import HomeClientScreen from "./src/views/Home/Client/HomeClientScreen.js";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Feather } from "@expo/vector-icons";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -13,8 +14,28 @@ function App() {
 
     return isLogged ? (
         <NavigationContainer>
-            <Tab.Navigator>
-                <Tab.Screen name="Início" component={HomeClientScreen} />
+            <Tab.Navigator 
+            screenOptions={{ headerShown: false }}
+            tabBarOptions={{ activeTintColor: "#808080", inactiveTintColor: "#FFD700" }}
+            >
+                <Tab.Screen 
+                name="Início" 
+                component={HomeClientScreen} 
+                options={{ tabBarIcon: ({color, size}) => <Feather name="home" color={color} size={size}/>}}
+                />
+
+                <Tab.Screen 
+                name="Carrinho" 
+                component={HomeClientScreen} 
+                options={{ tabBarIcon: ({color, size}) => <Feather name="shopping-cart" color={color} size={size}/>}}
+                />
+
+                <Tab.Screen 
+                name="Perfil" 
+                component={HomeClientScreen}
+                options={{ tabBarIcon: ({color, size}) => <Feather name="user" color={color} size={size}/>}}
+
+                />
             </Tab.Navigator>
         </NavigationContainer>
     ) : (
