@@ -11,14 +11,14 @@ const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 function App() {
-    const [isLogged, setIsLogged] = useState(true);
-    const [isAdmin, setIsAdmin] = useState(true);
+    const [isLogged, setIsLogged] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
 
     return isLogged ? (
         <NavigationContainer>
             <Tab.Navigator
                 screenOptions={{ headerShown: false }}
-                tabBarOptions={{ activeTintColor: "#808080", inactiveTintColor: "#FFD700" }}
+                screenOptions={{ activeTintColor: "#808080", inactiveTintColor: "#FFD700" }}
             >
                 <Tab.Screen
                     name="Início"
