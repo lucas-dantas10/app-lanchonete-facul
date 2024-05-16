@@ -9,8 +9,9 @@ import {
   Image,
 } from "react-native";
 import LoginPNG from "../../../assets/LogoLogin.png";
+import { Button } from "react-native-web";
 
-function LoginScreen() {
+function LoginScreen({navigation, route}) {
   const [inputUsuario, onChangeUsuario] = useState("");
   const [inputSenha, onChangeSenha] = useState("");
 
@@ -29,7 +30,18 @@ function LoginScreen() {
         onChangeText={onChangeSenha}
         value={inputSenha}
       />
-      <TouchableOpacity style={styles.buttonLogin}>
+
+      <Button 
+        onPress={() => navigation.navigate("Cadastro")}
+        title="registrar"
+      />
+      <TouchableOpacity 
+        onPress={() => {
+          route.params.funcLogar(true);
+          return navigation.navigate("Inicio");
+        }}
+        style={styles.buttonLogin}
+      >
         <Text>Login</Text>
       </TouchableOpacity>
     </View>

@@ -6,6 +6,7 @@ import HomeClientScreen from "./src/views/Home/Client/HomeClientScreen.js";
 import HomeAdminScreen from "./src/views/Home/Admin/HomeAdminScreen.js";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Feather } from "@expo/vector-icons";
+import SignUpScreen from "./src/views/SignUp/SignUpScreen.js";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -17,11 +18,11 @@ function App() {
     return isLogged ? (
         <NavigationContainer>
             <Tab.Navigator
-                screenOptions={{ headerShown: false }}
-                screenOptions={{ activeTintColor: "#808080", inactiveTintColor: "#FFD700" }}
+                screenOptions={{ headerShown: false, activeTintColor: "#808080", inactiveTintColor: "#FFD700" }}
             >
                 <Tab.Screen
-                    name="Início"
+                    initialParams={{funcLogar: setIsLogged}}
+                    name="Inicio"
                     component={ isAdmin ? HomeAdminScreen : HomeClientScreen}
                     options={{
                         tabBarIcon: ({ color, size }) => <Feather name="home" color={color} size={size} />,
@@ -50,8 +51,8 @@ function App() {
     ) : (
         <NavigationContainer>
             <Stack.Navigator>
-                <Stack.Screen name="Login" component={LoginScreen} />
-                {/* <Stack.Screen name="Cadastro" component={CadastroScreen} /> */}
+                <Stack.Screen name="Login" component={LoginScreen} initialParams={{funcLogar: setIsLogged}} />
+                <Stack.Screen name="Cadastro" component={SignUpScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     );

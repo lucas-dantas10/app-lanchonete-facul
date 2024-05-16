@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import { Picker } from '@react-native-picker/picker';
-import { StyleSheet,
+import {
+  StyleSheet,
   Text,
   View,
   TextInput,
   TouchableOpacity,
-  Image, } from 'react-native';
-  import LoginPNG from "./assets/LogoLogin.png";
+  Image,
+} from 'react-native';
+import LoginPNG from "../../../assets/LogoLogin.png";
 
-  function SingUpscreen() {
+function SignUpScreen() {
   const [inputName, setName] = useState("");
   const [inputSchool, setSchool] = useState("Selecione sua escola");
   const [inputUser, setUser] = useState("");
@@ -25,15 +27,15 @@ import { StyleSheet,
         onChangeText={setName}
         value={inputName}
       />
-     <Picker style={styles.input}
+      <Picker style={styles.input}
         inputEscola={setSchool}
         onValueChange={(itemValue, itemIndex) =>
-            setSchool(itemValue)
+          setSchool(itemValue)
         }>
         <Picker.Item label={inputSchool} value="" />
-        <Picker.Item label="Escola 1" value="Escola 1" key={0}/>
-        <Picker.Item label="Escola 2" value="Escola 2" key={1}/>
-        <Picker.Item label="Escola 3" value="Escola 3" key={2}/>
+        <Picker.Item label="Escola 1" value="Escola 1" key={0} />
+        <Picker.Item label="Escola 2" value="Escola 2" key={1} />
+        <Picker.Item label="Escola 3" value="Escola 3" key={2} />
       </Picker>
       <TextInput
         style={styles.input}
@@ -66,11 +68,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
   },
-  text:{
-    fontSize:30,
-    color:"#ffbc0d",
-    fontWeight:"bold",
-    marginBottom:"5%"
+  text: {
+    fontSize: 30,
+    color: "#ffbc0d",
+    fontWeight: "bold",
+    marginBottom: "5%"
   },
 
   input: {
@@ -98,4 +100,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SingUpscreen;
+export default SignUpScreen;
