@@ -8,6 +8,9 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Feather } from "@expo/vector-icons";
 import SignUpScreen from "./src/views/SignUp/SignUpScreen.js";
 import CartScreen from "./src/views/Cart/CartScreen.js";
+import { Buffer } from 'buffer'
+
+window.Buffer = window.Buffer ?? Buffer
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
