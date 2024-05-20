@@ -1,22 +1,20 @@
 import React, { useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, Image } from 'react-native';
 
 const CartScreen = () => {
-  // Estado inicial do carrinho com alguns itens
   const [cartItems, setCartItems] = useState([
-    { id: '1', name: 'Item 1', quantity: 1, price: 10.00 },
-    { id: '2', name: 'Item 2', quantity: 2, price: 15.00 },
-    { id: '3', name: 'Item 3', quantity: 1, price: 20.00 },
+    { id: '1', name: 'Hamburger', quantity: 1, price: 10.00, image: require("../../../assets/products/burger.jpg") },
+    { id: '2', name: 'Pizza', quantity: 2, price: 15.00, image: require("../../../assets/products/pizza.jpg") },
+    { id: '3', name: 'Pipoca', quantity: 1, price: 20.00, image: require("../../../assets/products/pipoca.jpeg") },
   ]);
 
-  // Função para calcular o total
   const calculateTotal = () => {
     return cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2);
   };
 
-  // Renderiza cada item do carrinho
   const renderItem = ({ item }) => (
     <View style={styles.itemContainer}>
+      <Image source={item.image} style={{ width: 50, height: 50, marginRight: 10 }} />
       <Text style={styles.itemName}>{item.name}</Text>
       <Text style={styles.itemDetails}>Quantidade: {item.quantity}</Text>
       <Text style={styles.itemDetails}>Preço: R${item.price.toFixed(2)}</Text>

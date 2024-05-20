@@ -6,15 +6,15 @@ const Menu = () => {
     const [pesquisa, setPesquisa] = useState("");
 
     const [items, setItems] = useState([
-        { name: "Hambúrguer", price: 8, image: require("../imagens/burger.jpg") },
-        { name: "Pizza", price: 8, image: require("../imagens/pizza.jpg") },
-        { name: "Sacolé", price: 5, image: require("../imagens/sacole.webp") },
-        { name: "Pipoca", price: 4, image: require("../imagens/pipoca.jpeg") },
-        { name: "Polvilho", price: 3, image: require("../imagens/polvilho.jpeg") },
-        { name: "Refrigerante", price: 6, image: require("../imagens/refrig.jpg") },
-        { name: "Refresco", price: 3, image: require("../imagens/refrig.jpg") },
-        { name: "Água", price: 3, image: require("../imagens/aguaS.jpeg") },
-        { name: "Água c/ gás", price: 3.5, image: require("../imagens/aguaC.jpg") },
+        { name: "Hambúrguer", price: 8, image: require("../../../../assets/products/burger.jpg") },
+        { name: "Pizza", price: 8, image: require("../../../../assets/products/pizza.jpg") },
+        { name: "Sacolé", price: 5, image: require("../../../../assets/products/sacole.webp") },
+        { name: "Pipoca", price: 4, image: require("../../../../assets/products/pipoca.jpeg") },
+        { name: "Polvilho", price: 3, image: require("../../../../assets/products/polvilho.jpeg") },
+        { name: "Refrigerante", price: 6, image: require("../../../../assets/products/refrig.jpg") },
+        { name: "Refresco", price: 3, image: require("../../../../assets/products/refrig.jpg") },
+        { name: "Água", price: 3, image: require("../../../../assets/products/aguaS.jpeg") },
+        { name: "Água c/ gás", price: 3.5, image: require("../../../../assets/products/aguaC.jpg") },
     ]);
 
     const filteredItems = items.filter((item) => item.name.toLowerCase().includes(pesquisa.toLowerCase()));
@@ -38,7 +38,7 @@ const Menu = () => {
                             <Text>Combo:</Text>
                             <Text style={styles.oferta}>Salgado + suco {"\n"}R$9,00</Text>
                         </View>
-                        <Image style={styles.imageCombo} source={require("../imagens/combo.jpg")} />
+                        <Image style={styles.imageCombo} source={require("../../../../assets/products/combo.jpg")} />
                     </View>
                 </TouchableOpacity>
             </View>
