@@ -7,12 +7,13 @@ import HomeAdminScreen from "./src/views/Home/Admin/HomeAdminScreen.js";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Feather } from "@expo/vector-icons";
 import SignUpScreen from "./src/views/SignUp/SignUpScreen.js";
+import CartScreen from "./src/views/Cart/CartScreen.js";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 function App() {
-    const [isLogged, setIsLogged] = useState(false);
+    const [isLogged, setIsLogged] = useState(true);
     const [isAdmin, setIsAdmin] = useState(false);
 
     return isLogged ? (
@@ -31,7 +32,7 @@ function App() {
 
                 <Tab.Screen
                     name="Carrinho"
-                    component={HomeClientScreen}
+                    component={CartScreen}
                     options={{
                         tabBarIcon: ({ color, size }) => (
                             <Feather name="shopping-cart" color={color} size={size} />
