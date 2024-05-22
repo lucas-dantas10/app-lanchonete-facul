@@ -1,0 +1,56 @@
+[
+    {
+        "id": 1,
+        "name": "Hambúrguer",
+        "price": 8,
+        "image": "../../assets/products/burger.jpg"
+    },
+    {
+        "id": 2,
+        "name": "Pizza",
+        "price": 8,
+        "image": "../../assets/products/pizza.jpg"
+    },
+    {
+        "id": 4,
+        "name": "Sacolé",
+        "price": 5,
+        "image": "../../assets/products/sacole.webp"
+    },
+    {
+        "id": 5,
+        "name": "Pipoca",
+        "price": 4,
+        "image": "../../assets/products/pipoca.jpeg"
+    },
+    {
+        "id": 6,
+        "name": "Polvilho",
+        "price": 3,
+        "image": "../../assets/products/polvilho.jpeg"
+    },
+    {
+        "id": 7,
+        "name": "Refrigerante",
+        "price": 6,
+        "image": "../../assets/products/refrig.jpg"
+    },
+    {
+        "id": 8,
+        "name": "Refresco",
+        "price": 3,
+        "image": "../../assets/products/refrig.jpg"
+    },
+    {
+        "id": 9,
+        "name": "Água",
+        "price": 3,
+        "image": "../../assets/products/aguaS.jpeg"
+    },
+    {
+        "id": 10,
+        "name": "Água c/ gás",
+        "price": 3.5,
+        "image": "../../assets/products/aguaC.jpg"
+    }
+]

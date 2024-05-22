@@ -1,0 +1,23 @@
+[
+    {
+        "id": "1",
+        "name": "Hamburger",
+        "quantity": 1,
+        "price": 10.00,
+        "image": "../../../assets/products/burger.jpg"
+    },
+    {
+        "id": "2",
+        "name": "Pizza",
+        "quantity": 2,
+        "price": 15.00,
+        "image": "../../../assets/products/pizza.jpg"
+    },
+    {
+        "id": "3",
+        "name": "Pipoca",
+        "quantity": 1,
+        "price": 20.00,
+        "image": "../../../assets/products/pipoca.jpeg"
+    }
+]
