@@ -16,7 +16,7 @@ const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 function App() {
-    const [isLogged, setIsLogged] = useState(true);
+    const [isLogged, setIsLogged] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
 
     return isLogged ? (
@@ -25,7 +25,7 @@ function App() {
                 screenOptions={{ headerShown: false, activeTintColor: "#808080", inactiveTintColor: "#FFD700" }}
             >
                 <Tab.Screen
-                    initialParams={{funcLogar: setIsLogged}}
+                    initialParams={{isLogado: setIsLogged, isAdmin: setIsAdmin}}
                     name="Inicio"
                     component={ isAdmin ? HomeAdminScreen : HomeClientScreen}
                     options={{
@@ -55,7 +55,7 @@ function App() {
     ) : (
         <NavigationContainer>
             <Stack.Navigator>
-                <Stack.Screen name="Login" component={LoginScreen} initialParams={{funcLogar: setIsLogged}} />
+                <Stack.Screen name="Login" component={LoginScreen} initialParams={{isLogado: setIsLogged, isAdmin: setIsAdmin}} />
                 <Stack.Screen name="Cadastro" component={SignUpScreen} />
             </Stack.Navigator>
         </NavigationContainer>

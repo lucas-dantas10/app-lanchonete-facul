@@ -14,6 +14,29 @@ import { Button } from "react-native-web";
 function LoginScreen({navigation, route}) {
   const [inputUsuario, onChangeUsuario] = useState("");
   const [inputSenha, onChangeSenha] = useState("");
+  const usersData = require('../../../data/users/users.json');
+
+  function login() {
+    const user = searchUser();
+
+    if (user.length == 0) {
+        return;
+    }
+
+    route.params.isLogado(true);
+    route.params.isAdmin(false);
+
+    if (user[0].is_admin == true) {
+        route.params.isLogado(true);
+        route.params.isAdmin(true);
+    }
+    
+    return navigation.navigate("Inicio");
+  }
+
+  function searchUser() {
+    return usersData.filter(user => user.name == inputUsuario);
+  }
 
   return (
     <View style={styles.container}>
@@ -36,10 +59,8 @@ function LoginScreen({navigation, route}) {
         title="registrar"
       />
       <TouchableOpacity 
-        onPress={() => {
-          route.params.funcLogar(true);
-          return navigation.navigate("Inicio");
-        }}
+        disabled={inputUsuario != '' && inputSenha != '' ? false : true}
+        onPress={login}
         style={styles.buttonLogin}
       >
         <Text>Login</Text>
