@@ -5,19 +5,19 @@ import { Feather } from "@expo/vector-icons";
 const Menu = () => {
     const [pesquisa, setPesquisa] = useState("");
 
-    const [items, setItems] = useState([
-        { name: "Hambúrguer", price: 8, image: require("../../../../assets/products/burger.jpg") },
-        { name: "Pizza", price: 8, image: require("../../../../assets/products/pizza.jpg") },
-        { name: "Sacolé", price: 5, image: require("../../../../assets/products/sacole.webp") },
-        { name: "Pipoca", price: 4, image: require("../../../../assets/products/pipoca.jpeg") },
-        { name: "Polvilho", price: 3, image: require("../../../../assets/products/polvilho.jpeg") },
-        { name: "Refrigerante", price: 6, image: require("../../../../assets/products/refrig.jpg") },
-        { name: "Refresco", price: 3, image: require("../../../../assets/products/refrig.jpg") },
-        { name: "Água", price: 3, image: require("../../../../assets/products/aguaS.jpeg") },
-        { name: "Água c/ gás", price: 3.5, image: require("../../../../assets/products/aguaC.jpg") },
-    ]);
+    const products = require('../../../../data/products/products.json');
+
+    const [items, setItems] = useState(products);
 
     const filteredItems = items.filter((item) => item.name.toLowerCase().includes(pesquisa.toLowerCase()));
+
+    const renderProducts = ({ item }) => (
+        <View style={styles.itemContainer}>
+          <Image source={item.image} style={{ width: 50, height: 50, marginRight: 10 }} />
+          <Text style={styles.itemName}>{item.name}</Text>
+          <Text style={styles.itemDetails}>Preço: R${item.price.toFixed(2)}</Text>
+        </View>
+      );
 
     return (
         <View style={styles.container}>
@@ -45,34 +45,14 @@ const Menu = () => {
 
             <View>
                 <Text style={styles.textCardapio}>Cardápio</Text>
-                <View style={{ alignItems: "center" }}>
+                <View style={{ alignItems: "center", width: '100%' }}>
                     <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 10 }}>Menu</Text>
-                    <View 
-                        style={{ 
-                            flexDirection: "column", 
-                            alignItems: "center",
-                            width: '100%', 
-                        }}
-                    >
-                        {items.map((item, index) => (
-                            <View
-                                key={index}
-                                style={{
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    width: "100%",
-                                    borderBottomWidth: 1,
-                                    padding: '1rem',
-                                    borderBottomColor: 'ccc'
-                                }}
-                            >
-                                <Image source={item.image} style={{ width: 50, height: 50, marginRight: 10 }} />
-                                <Text>
-                                    {item.name} - R${item.price.toFixed(2)}
-                                </Text>
-                            </View>
-                        ))}
+                    <View style={styles.container}>
+                        <FlatList
+                            data={items}
+                            renderItem={renderProducts}
+                            keyExtractor={item => item.id}
+                        />
                     </View>
                 </View>
             </View>
@@ -81,8 +61,27 @@ const Menu = () => {
 };
 
 const styles = StyleSheet.create({
+    itemContainer: {
+        padding: 16,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+      },
+      itemContainer: {
+        padding: 16,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+      },
+      itemName: {
+        fontSize: 18,
+        fontWeight: 'bold',
+      },
+      itemDetails: {
+        fontSize: 16,
+        marginTop: 4,
+      },
     container: {
         paddingHorizontal: 10,
+        width: '100%'
     },
 
     pesquisa: {
