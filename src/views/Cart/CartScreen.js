@@ -2,11 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, Image } from 'react-native';
 
 const CartScreen = () => {
-  const [cartItems, setCartItems] = useState([
-    { id: '1', name: 'Hamburger', quantity: 1, price: 10.00, image: require("../../../assets/products/burger.jpg") },
-    { id: '2', name: 'Pizza', quantity: 2, price: 15.00, image: require("../../../assets/products/pizza.jpg") },
-    { id: '3', name: 'Pipoca', quantity: 1, price: 20.00, image: require("../../../assets/products/pipoca.jpeg") },
-  ]);
+  const cartItemsData = require('../../../data/cart/cart.json');
+  const [cartItems, setCartItems] = useState(cartItemsData);
 
   const calculateTotal = () => {
     return cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2);
