@@ -14,7 +14,9 @@ import { Button } from "react-native-web";
 function LoginScreen({navigation, route}) {
   const [inputUsuario, onChangeUsuario] = useState("");
   const [inputSenha, onChangeSenha] = useState("");
+  const [showLoginPng, setShowLoginPng] = useState(true);
   const usersData = require('../../../data/users/users.json');
+  
 
   function login() {
     const user = searchUser();
@@ -40,13 +42,16 @@ function LoginScreen({navigation, route}) {
 
   return (
     <View style={styles.container}>
-      <Image style={styles.LoginPNG} source={LoginPNG} />
-      <TextInput
-        style={styles.input}
-        placeholder="Usuário"
-        onChangeText={onChangeUsuario}
-        value={inputUsuario}
-      />
+    {showLoginPng && <Image style={styles.LoginPNG} source={LoginPNG} />}
+    <TextInput
+      style={styles.input}
+      placeholder="Usuário"
+      onChangeText={(text) => {
+        onChangeUsuario(text);
+        setShowLoginPng(false); 
+      }}
+      value={inputUsuario}
+    />
       <TextInput
         style={styles.input}
         placeholder="Senha"
@@ -54,10 +59,14 @@ function LoginScreen({navigation, route}) {
         value={inputSenha}
       />
 
-      <Button 
+      <TouchableOpacity
         onPress={() => navigation.navigate("Cadastro")}
-        title="registrar"
-      />
+        style={styles.buttonRegister}>
+        <Text
+        style={styles.textRegister}>
+          Não Posui uma Conta? Cadastre-se! 
+        </Text>
+      </TouchableOpacity>
       <TouchableOpacity 
         disabled={inputUsuario != '' && inputSenha != '' ? false : true}
         onPress={login}
@@ -84,6 +93,13 @@ const styles = StyleSheet.create({
     padding: 14,
     backgroundColor: "#e3e3e3",
   },
+  buttonRegister:{
+    margin: 4,
+  },
+  textRegister:{
+    color:"#3a3a3a",
+  },
+
   buttonLogin: {
     alignItems: "center",
     justifyContent: "center",
@@ -93,6 +109,7 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: "#ffbc0d",
   },
+
   LoginPNG: {
     width: "100%",
     height: "30%",
