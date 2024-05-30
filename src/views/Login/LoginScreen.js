@@ -9,7 +9,6 @@ import {
   Image,
 } from "react-native";
 import LoginPNG from "../../../assets/LogoLogin.png";
-import { Button } from "react-native-web";
 
 function LoginScreen({navigation, route}) {
   const [inputUsuario, onChangeUsuario] = useState("");
@@ -33,7 +32,7 @@ function LoginScreen({navigation, route}) {
         route.params.isAdmin(true);
     }
     
-    return navigation.navigate("Inicio");
+    return navigation.navigate("Home");
   }
 
   function searchUser() {
