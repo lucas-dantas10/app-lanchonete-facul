@@ -16,42 +16,66 @@ const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 function App() {
-    const [isLogged, setIsLogged] = useState(false);
-    const [isAdmin, setIsAdmin] = useState(false);
+    const [isLogged, setIsLogged] = useState(true);
+    const [isAdmin, setIsAdmin] = useState(true);
 
     return isLogged ? (
-        <NavigationContainer>
-            <Tab.Navigator
-                screenOptions={{ headerShown: false, activeTintColor: "#808080", inactiveTintColor: "#FFD700" }}
-            >
-                <Tab.Screen
-                    initialParams={{isLogado: setIsLogged, isAdmin: setIsAdmin}}
-                    name="Inicio"
-                    component={ isAdmin ? HomeAdminScreen : HomeClientScreen}
-                    options={{
-                        tabBarIcon: ({ color, size }) => <Feather name="home" color={color} size={size} />,
-                    }}
-                />
+        isAdmin ? (
+            <NavigationContainer>
+                <Tab.Navigator
+                    screenOptions={{ headerShown: false, activeTintColor: "#808080", inactiveTintColor: "#FFD700" }}
+                >
+                    <Tab.Screen
+                        initialParams={{isLogado: setIsLogged, isAdmin: setIsAdmin}}
+                        name="Home"
+                        component={ HomeAdminScreen}
+                        options={{
+                            tabBarIcon: ({ color, size }) => <Feather name="home" color={color} size={size} />,
+                        }}
+                    />
 
-                <Tab.Screen
-                    name="Carrinho"
-                    component={CartScreen}
-                    options={{
-                        tabBarIcon: ({ color, size }) => (
-                            <Feather name="shopping-cart" color={color} size={size} />
-                        ),
-                    }}
-                />
+                    <Tab.Screen
+                        name="Perfil"
+                        component={HomeClientScreen}
+                        options={{
+                            tabBarIcon: ({ color, size }) => <Feather name="user" color={color} size={size} />,
+                        }}
+                    />
+                </Tab.Navigator>
+            </NavigationContainer>
+        ) :
+            <NavigationContainer>
+                <Tab.Navigator
+                    screenOptions={{ headerShown: false, activeTintColor: "#808080", inactiveTintColor: "#FFD700" }}
+                >
+                    <Tab.Screen
+                        initialParams={{isLogado: setIsLogged, isAdmin: setIsAdmin}}
+                        name="Home"
+                        component={ HomeClientScreen }
+                        options={{
+                            tabBarIcon: ({ color, size }) => <Feather name="home" color={color} size={size} />,
+                        }}
+                    />
+                    
+                    <Tab.Screen
+                        name="Carrinho"
+                        component={CartScreen}
+                        options={{
+                            tabBarIcon: ({ color, size }) => (
+                                <Feather name="shopping-cart" color={color} size={size} />
+                            ),
+                        }}
+                    />
 
-                <Tab.Screen
-                    name="Perfil"
-                    component={HomeClientScreen}
-                    options={{
-                        tabBarIcon: ({ color, size }) => <Feather name="user" color={color} size={size} />,
-                    }}
-                />
-            </Tab.Navigator>
-        </NavigationContainer>
+                    <Tab.Screen
+                        name="Perfil"
+                        component={HomeClientScreen}
+                        options={{
+                            tabBarIcon: ({ color, size }) => <Feather name="user" color={color} size={size} />,
+                        }}
+                    />
+                </Tab.Navigator>
+            </NavigationContainer>
     ) : (
         <NavigationContainer>
             <Stack.Navigator>
