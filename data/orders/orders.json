@@ -1,0 +1,22 @@
+[
+    {
+        "client": "Teste",
+        "products": 
+        [
+            {"name": "Hamburger", "quantity": 1}, {"name": "Pastel", "quantity": 1}
+        ],
+        "quantity": 2,
+        "price": 10.20,
+        "token_order": "KCBPQA"
+    },
+    {
+        "client": "Teste",
+        "products": 
+        [
+            {"name": "Hamburger", "quantity": 1}, {"name": "Pastel", "quantity": 1}
+        ],
+        "quantity": 2,
+        "price": 10.20,
+        "token_order": "KCBPQA"
+    }
+]
