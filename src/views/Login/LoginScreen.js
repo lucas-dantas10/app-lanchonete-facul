@@ -63,7 +63,7 @@ function LoginScreen({navigation, route}) {
         style={styles.buttonRegister}>
         <Text
         style={styles.textRegister}>
-          Não Posui uma Conta? Cadastre-se! 
+          Não Posui uma Conta? <Text style={{color: 'blue'}}>Cadastre-se</Text> 
         </Text>
       </TouchableOpacity>
       <TouchableOpacity 
