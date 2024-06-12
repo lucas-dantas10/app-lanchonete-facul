@@ -4,7 +4,6 @@ import {
   StyleSheet,
   Text,
   View,
-  SafeAreaView,
   TextInput,
   TouchableOpacity,
   Image,
@@ -17,19 +16,21 @@ function LoginScreen({navigation, route}) {
   const [inputUsuario, onChangeUsuario] = useState("");
   const [inputSenha, onChangeSenha] = useState("");
   const [showLoginPng, setShowLoginPng] = useState(true);
-  const usersData = require('../../../data/users/users.json');
   
   async function login() {
     try {
         const response = await api.post('/login', { email: inputUsuario, password: inputSenha });
-        console.log(response.data);
         const { user, token } = response.data;
 
-  
         await AsyncStorage.setItem('user', JSON.stringify(user));
         await AsyncStorage.setItem('token', token);
-  
-        return navigation.navigate("Home");
+
+        route.params.isLogado(true);
+        route.params.isAdmin(false);
+
+        if (user.is_admin == true) {
+            route.params.isAdmin(true);
+        }
       } catch (error) {
         Alert.alert('Erro', 'Email ou Senha incorretos!', [
             {
@@ -39,11 +40,9 @@ function LoginScreen({navigation, route}) {
             },
             {text: 'OK', onPress: () => console.log('OK Pressed')},
           ]);
+      } finally {
+        navigation.navigate("Home");
       }
-  }
-
-  function searchUser() {
-    return usersData.filter(user => user.name == inputUsuario);
   }
 
   return (
