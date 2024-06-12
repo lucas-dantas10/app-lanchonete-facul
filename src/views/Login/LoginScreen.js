@@ -10,7 +10,7 @@ import {
   Alert 
 } from "react-native";
 import LoginPNG from "../../../assets/LogoLogin.png";
-import {AsyncStorage} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function LoginScreen({navigation, route}) {
   const [inputUsuario, onChangeUsuario] = useState("");
