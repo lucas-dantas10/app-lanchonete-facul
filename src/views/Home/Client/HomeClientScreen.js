@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, FlatList, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { Feather } from "@expo/vector-icons";
+import { SafeAreaView } from "react-native-safe-area-context";
+
 
 const Menu = () => {
     const [pesquisa, setPesquisa] = useState("");
@@ -13,122 +15,132 @@ const Menu = () => {
 
     const renderProducts = ({ item }) => (
         <View style={styles.itemContainer}>
-          <Image source={item.image} style={{ width: 50, height: 50, marginRight: 10 }} />
+          <Image source={item.image} style={{ width: 50, height: 50}} />
           <Text style={styles.itemName}>{item.name}</Text>
-          <Text style={styles.itemDetails}>Preço: R${item.price.toFixed(2)}</Text>
+          <Text style={styles.itemDetails}>R${item.price.toFixed(2)}</Text>
+          <View style={styles.itemAdd}>
+            <TouchableOpacity><Image style={styles.itemAddImage} source={require("../../../../assets/mais.png")}/></TouchableOpacity>
+          
+          </View>
         </View>
       );
 
     return (
         <View style={styles.container}>
-            <View style={styles.pesquisa}>
-                <TextInput
-                    style={styles.input}
-                    placeholder="Pesquisar"
-                    onChangeText={setPesquisa}
-                    value={pesquisa}
-                />
-            </View>
-
-            <View>
-                <Text style={styles.textPromo}>Promoções</Text>
+            
+            <SafeAreaView>
+                <Text style={styles.textMenu}>Menu</Text>
                 <TouchableOpacity>
                     <View style={styles.promocao}>
                         <View style={styles.infoPromo}>
-                            <Text>Combo:</Text>
-                            <Text style={styles.oferta}>Salgado + suco {"\n"}R$9,00</Text>
+                            <Text style={styles.oferta}>O Mais Pedido! Salgado + Suco R$9,00</Text>
+                            <Image style={styles.imageCombo} source={require("../../../../assets/products/combo.jpg")} />
+                            
                         </View>
-                        <Image style={styles.imageCombo} source={require("../../../../assets/products/combo.jpg")} />
                     </View>
                 </TouchableOpacity>
-            </View>
+            </SafeAreaView>
 
             <View>
                 <Text style={styles.textCardapio}>Cardápio</Text>
-                <View style={{ alignItems: "center", width: '100%' }}>
-                    <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 10 }}>Menu</Text>
-                    <View style={styles.container}>
+                    <View style={styles.containerCardapio}>
                         <FlatList
                             data={items}
                             renderItem={renderProducts}
                             keyExtractor={item => item.id}
+                            numColumns={2}
                         />
                     </View>
-                </View>
             </View>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-    itemContainer: {
-        padding: 16,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
-      },
+    container:
+    {
+        backgroundColor:"white",
+    },
       itemContainer: {
-        padding: 16,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
-      },
+        flex:1,
+        alignItems:"center",
+        justifyContent:"center",
+        backgroundColor:"#e9e9e7",
+        margin:14,
+        padding: 5,
+        borderRadius:10,
+        shadowColor: "#000000",
+        shadowOffset: {
+        width: 0,
+        height: 3,
+        },
+        shadowOpacity: 0.17,
+        shadowRadius: 3.05,
+        elevation: 4,
+         },
       itemName: {
         fontSize: 18,
         fontWeight: 'bold',
       },
       itemDetails: {
-        fontSize: 16,
-        marginTop: 4,
+
       },
-    container: {
-        paddingHorizontal: 10,
-        width: '100%'
-    },
+      itemAddImage:
+      {
+        padding:5,
+        width:20,
+        height:20,
 
-    pesquisa: {
-        backgroundColor: "#f0f0f0",
-        borderRadius: 10,
-        padding: 10,
-        marginBottom: 10,
-    },
+      },
 
-    textPromo: {
-        fontSize: 20,
-        paddingLeft: 10,
+    textMenu: {
+        fontSize: 24,
+        padding:10,
+        fontWeight:"bold",
+
     },
 
     promocao: {
-        backgroundColor: "#FFD700",
-        borderRadius: 10,
-        paddingLeft: 12,
-        margin: 10,
-        display: "flex",
-        flexDirection: "row",
+        backgroundColor: "#DA291C",
+        flex:1,
+        margin:10,
+        padding:10,
+        borderRadius:10,
+        shadowColor: "#000000",
+        shadowOffset: {
+        width: 0,
+        height: 3,
+        },
+        shadowOpacity: 0.17,
+        shadowRadius: 3.05,
+        elevation: 4,
     },
 
     infoPromo: {
-        marginTop: 10,
-        marginBottom: 30,
+        display:"flex",
+        flexDirection:"row",
+        alignItems:"center",
     },
 
     oferta: {
-        fontSize: 16,
-        paddingTop: 10,
+        textAlign:"center",
+        fontSize: 20,
+        padding: 10,
         fontWeight: "bold",
-        color: "white",
+        color:"white",
     },
 
     imageCombo: {
-        width: 80,
-        height: 80,
+        width:100,
+        height:100,
         borderRadius: 10,
-        position: "absolute",
-        left: 270,
-        top: 8,
     },
 
     textCardapio: {
         fontSize: 20,
-        textAlign: "center",
+        fontWeight:"bold",
+        padding:10,
+        
     },
 
     item: {
@@ -164,9 +176,6 @@ const styles = StyleSheet.create({
         padding: 2,
     },
 
-    teste: {
-        alignItems: "center",
-    },
 });
 
 export default Menu;
