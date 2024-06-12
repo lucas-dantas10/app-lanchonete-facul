@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import api from "../../../api";
 import {
   StyleSheet,
   Text,
@@ -7,8 +8,10 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
+  Alert 
 } from "react-native";
 import LoginPNG from "../../../assets/LogoLogin.png";
+import {AsyncStorage} from 'react-native';
 
 function LoginScreen({navigation, route}) {
   const [inputUsuario, onChangeUsuario] = useState("");
@@ -16,23 +19,27 @@ function LoginScreen({navigation, route}) {
   const [showLoginPng, setShowLoginPng] = useState(true);
   const usersData = require('../../../data/users/users.json');
   
+  async function login() {
+    try {
+        const response = await api.post('/login', { email: inputUsuario, password: inputSenha });
+        console.log(response.data);
+        const { user, token } = response.data;
 
-  function login() {
-    const user = searchUser();
-
-    if (user.length == 0) {
-        return;
-    }
-
-    route.params.isLogado(true);
-    route.params.isAdmin(false);
-
-    if (user[0].is_admin == true) {
-        route.params.isLogado(true);
-        route.params.isAdmin(true);
-    }
-    
-    return navigation.navigate("Home");
+  
+        await AsyncStorage.setItem('user', JSON.stringify(user));
+        await AsyncStorage.setItem('token', token);
+  
+        return navigation.navigate("Home");
+      } catch (error) {
+        Alert.alert('Erro', 'Email ou Senha incorretos!', [
+            {
+              text: 'Cancel',
+              onPress: () => console.log('Cancel Pressed'),
+              style: 'cancel',
+            },
+            {text: 'OK', onPress: () => console.log('OK Pressed')},
+          ]);
+      }
   }
 
   function searchUser() {
@@ -44,7 +51,7 @@ function LoginScreen({navigation, route}) {
     {showLoginPng && <Image style={styles.LoginPNG} source={LoginPNG} />}
     <TextInput
       style={styles.input}
-      placeholder="Usuário"
+      placeholder="Email"
       onChangeText={(text) => {
         onChangeUsuario(text);
         setShowLoginPng(false); 
@@ -54,6 +61,7 @@ function LoginScreen({navigation, route}) {
       <TextInput
         style={styles.input}
         placeholder="Senha"
+        secureTextEntry={true}
         onChangeText={onChangeSenha}
         value={inputSenha}
       />
