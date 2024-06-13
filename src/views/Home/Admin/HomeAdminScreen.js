@@ -3,8 +3,7 @@ import { View, Text, FlatList, StyleSheet } from "react-native";
 import api from "../../../../api";
 
 const HomeAdminScreen = () => {
-  const cartItemsData = require("../../../../data/orders/orders.json");
-  const [orders, setOrders] = useState(cartItemsData);
+  const [orders, setOrders] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

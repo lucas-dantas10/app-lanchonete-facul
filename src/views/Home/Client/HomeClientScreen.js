@@ -1,24 +1,40 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, TextInput, FlatList, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
+import api from "../../../../api";
 
 const Menu = () => {
     const [pesquisa, setPesquisa] = useState("");
+    const [items, setItems] = useState("");
+    const [loading, setLoading] = useState(true);
 
-    const products = require('../../../../data/products/products.json');
-    const [items, setItems] = useState(products);
-
-    const filteredItems = items.filter((item) => item.name.toLowerCase().includes(pesquisa.toLowerCase()));
+    useEffect(() => {
+      api.get('/products')
+          .then(({ data }) => {
+              console.log(data);
+              setItems(data.products);
+              setLoading(false);
+          })
+          .catch((err) => setLoading(false));
+    }, []);
 
     const renderProducts = ({ item }) => (
         <View style={styles.itemContainer}>
-            <Image source={item.image} style={styles.itemImage} />
-            <Text style={styles.itemName}>{item.name}</Text>
-            <Text style={styles.itemDetails}>R${item.price.toFixed(2)}</Text>
+            <Image source={item.image_path} style={styles.itemImage} />
+            <Text style={styles.itemName}>{ item.name }</Text>
+            <Text style={styles.itemDetails}>R$ {item.price.toFixed(2) }</Text>
             <Image style={styles.itemAddImage} source={require("../../../../assets/mais.png")} />
         </View>
     );
+
+    if (loading) {
+        return (
+          <View style={styles.loadingContainer}>
+            <Text>Carregando...</Text>
+          </View>
+        );
+      }
 
     return (
         <View style={styles.container}>
@@ -43,7 +59,7 @@ const Menu = () => {
                 <View style={styles.containerCardapio}>
                     <Text style={styles.textCardapio}>Cardápio</Text>
                     <FlatList
-                        data={filteredItems}
+                        data={items}
                         renderItem={renderProducts}
                         keyExtractor={item => item.id}
                         numColumns={2}
