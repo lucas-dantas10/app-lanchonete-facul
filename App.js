@@ -18,7 +18,7 @@ const Stack = createNativeStackNavigator();
 
 function App() {
     const [isLogged, setIsLogged] = useState(true);
-    const [isAdmin, setIsAdmin] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(true);
 
     return isLogged ? (
         isAdmin ? (

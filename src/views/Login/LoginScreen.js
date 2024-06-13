@@ -1,42 +1,48 @@
 import React, { useState } from "react";
+import api from "../../../api";
 import {
   StyleSheet,
   Text,
   View,
-  SafeAreaView,
   TextInput,
   TouchableOpacity,
   Image,
+  Alert 
 } from "react-native";
 import LoginPNG from "../../../assets/LogoLogin.png";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 function LoginScreen({navigation, route}) {
   const [inputUsuario, onChangeUsuario] = useState("");
   const [inputSenha, onChangeSenha] = useState("");
   const [showLoginPng, setShowLoginPng] = useState(true);
-  const usersData = require('../../../data/users/users.json');
   
+  async function login() {
+    try {
+        const response = await api.post('/login', { email: inputUsuario, password: inputSenha });
+        const { user, token } = response.data;
 
-  function login() {
-    const user = searchUser();
+        await AsyncStorage.setItem('user', JSON.stringify(user));
+        await AsyncStorage.setItem('token', token);
 
-    if (user.length == 0) {
-        return;
-    }
-
-    route.params.isLogado(true);
-    route.params.isAdmin(false);
-
-    if (user[0].is_admin == true) {
         route.params.isLogado(true);
-        route.params.isAdmin(true);
-    }
-    
-    return navigation.navigate("Home");
-  }
+        route.params.isAdmin(false);
 
-  function searchUser() {
-    return usersData.filter(user => user.name == inputUsuario);
+        if (user.is_admin == true) {
+            route.params.isAdmin(true);
+        }
+      } catch (error) {
+        Alert.alert('Erro', 'Email ou Senha incorretos!', [
+            {
+              text: 'Cancel',
+              onPress: () => console.log('Cancel Pressed'),
+              style: 'cancel',
+            },
+            {text: 'OK', onPress: () => console.log('OK Pressed')},
+          ]);
+      } finally {
+        navigation.navigate("Home");
+      }
   }
 
   return (
@@ -44,7 +50,7 @@ function LoginScreen({navigation, route}) {
     {showLoginPng && <Image style={styles.LoginPNG} source={LoginPNG} />}
     <TextInput
       style={styles.input}
-      placeholder="Usuário"
+      placeholder="Email"
       onChangeText={(text) => {
         onChangeUsuario(text);
         setShowLoginPng(false); 
@@ -54,6 +60,7 @@ function LoginScreen({navigation, route}) {
       <TextInput
         style={styles.input}
         placeholder="Senha"
+        secureTextEntry={true}
         onChangeText={onChangeSenha}
         value={inputSenha}
       />
