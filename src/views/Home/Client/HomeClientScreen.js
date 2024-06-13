@@ -19,12 +19,25 @@ const Menu = () => {
           .catch((err) => setLoading(false));
     }, []);
 
+    function addItemInCart(product) {
+        api.post('/cart/create', {
+            product_id: product.id,
+            quantity: 1
+        })
+        .then(({data}) => {
+            console.log(data)
+            setLoading(false);
+        });
+    }
+
     const renderProducts = ({ item }) => (
         <View style={styles.itemContainer}>
             <Image source={item.image_path} style={styles.itemImage} />
             <Text style={styles.itemName}>{ item.name }</Text>
             <Text style={styles.itemDetails}>R$ {item.price.toFixed(2) }</Text>
-            <Image style={styles.itemAddImage} source={require("../../../../assets/mais.png")} />
+            <TouchableOpacity onPress={() => addItemInCart(item)}>
+                <Image style={styles.itemAddImage} source={require("../../../../assets/mais.png")} />
+            </TouchableOpacity>
         </View>
     );
 
