@@ -10,6 +10,8 @@ import {
 import RNPickerSelect from "react-native-picker-select";
 import * as Animatable from "react-native-animatable";
 import check from "../../../assets/check.png";
+import api from '../../../api';
+
 function SignUpScreen() {
   const [inputSchool, setSchool] = useState(null);
   const [inputUser, setUser] = useState("");
@@ -25,17 +27,17 @@ function SignUpScreen() {
     let newErrors = {};
 
     if (inputSchool === null) {
-      newErrors.inputSchool = "Ecolha a Sua Escola Para seu Cadastro";
+      newErrors.inputSchool = "Escolha a sua escola para seu cadastro";
     }
 
     if (!inputUser) {
-      newErrors.inputUser = "Insira Um Nome De Usuário";
+      newErrors.inputUser = "Insira um E-mail";
     }
 
     if (!inputPassword) {
-      newErrors.inputPassword = "Insira Uma Senha Para Cadastro";
+      newErrors.inputPassword = "Insira uma senha para cadastro";
     } else if (inputPassword.length < 6) {
-      newErrors.inputPassword = "A Senha Precisa Conter No Mínimo 6 Caracteres";
+      newErrors.inputPassword = "A senha precisa conter no mínimo 6 caracteres";
     }
 
     setErrors(newErrors);
@@ -48,26 +50,37 @@ function SignUpScreen() {
 
   const handleSubmit = () => {
     validateForm();
-    if (Object.keys(errors).length === 0) {
-      Alert.alert(
-        "Sucesso!",
-        "Cadastro Realizado Com Sucesso!",
-        [
-          {
-            text: "OK",
-            onPress: () => console.log("Alerta de sucesso fechado"),
-          },
-        ],
-        { cancelable: false }
-      );
-    } else {
-      Alert.alert(
-        "Atenção!",
-        "Cadastro Incompleto. Verifique se está preenchido corretamente.",
-        [{ text: "OK", onPress: () => console.log("Alerta de erro fechado") }],
-        { cancelable: false }
-      );
-    }
+
+    const data = {
+        email: inputUser,
+        school: inputSchool,
+        password: inputPassword,
+    };
+
+    api.post('/create/user', data)
+        .then(({ data }) => {
+            if (Object.keys(errors).length === 0) {
+                Alert.alert(
+                  "Sucesso!",
+                  "Cadastro Realizado Com Sucesso!",
+                  [
+                    {
+                      text: "OK",
+                      onPress: () => console.log("Alerta de sucesso fechado"),
+                    },
+                  ],
+                  { cancelable: false }
+                );
+              }
+        })
+        .catch (() => {
+            Alert.alert(
+                "Atenção!",
+                "Erro ao cadastrar usuário! Verifique se está preenchido corretamente.",
+                [{ text: "OK", onPress: () => console.log("Alerta de erro fechado") }],
+                { cancelable: false }
+              );
+        });
   };
 
   return (
@@ -86,7 +99,7 @@ function SignUpScreen() {
       </View>
       <TextInput
         style={styles.input}
-        placeholder="Usuário"
+        placeholder="Email"
         onChangeText={setUser}
         value={inputUser}
       />
