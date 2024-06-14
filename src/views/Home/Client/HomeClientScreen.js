@@ -4,19 +4,58 @@ import { Feather } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import api from "../../../../api";
 
-const Menu = () => {
-    const [pesquisa, setPesquisa] = useState("");
+const HomeClientScreen = () => {
     const [items, setItems] = useState("");
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-      api.get('/products')
-          .then(({ data }) => {
-              console.log(data);
-              setItems(data.products);
-              setLoading(false);
-          })
-          .catch((err) => setLoading(false));
+        const products = [
+            {
+                id: 9,
+                name: "Biscoito de Polvilho",
+                description: "Biscoito de Polvilho Salgado",
+                image_path: require("../../../../assets/products/sacole.png"),
+                price: 3
+            },
+            {
+                id: 10,
+                name: "Biscoito de Polvilho",
+                description: "Biscoito de Polvilho Salgado",
+                image_path: require("../../../../assets/products/sacole.png"),
+                price: 3
+            },
+            {
+                id: 11,
+                name: "Biscoito de Polvilho",
+                description: "Biscoito de Polvilho Salgado",
+                image_path: require("../../../../assets/products/sacole.png"),
+                price: 3
+            },
+            {
+                id: 12,
+                name: "Biscoito de Polvilho",
+                description: "Biscoito de Polvilho Salgado",
+                image_path: require("../../../../assets/products/sacole.png"),
+                price: 3
+            },
+            {
+                id: 13,
+                name: "Biscoito de Polvilho",
+                description: "Biscoito de Polvilho Salgado",
+                image_path: require("../../../../assets/products/sacole.png"),
+                price: 3
+            },
+
+        ]
+        setItems(products);
+        setLoading(false);
+    //   api.get('/products')
+    //       .then(({ data }) => {
+    //           console.log(data);
+    //           setItems(data.products);
+    //           setLoading(false);
+    //       })
+    //       .catch((err) => setLoading(false));
     }, []);
 
     function addItemInCart(product) {
@@ -61,7 +100,7 @@ const Menu = () => {
                             <Text style={styles.oferta}>Salgado + Suco</Text>
                             <Text style={styles.ofertaPreco}>Por Apenas R$9,00</Text>
                             </View>
-                            
+
                             <Image style={styles.imageCombo} source={require("../../../../assets/products/combo.jpg")} />
                         </View>
                     </View>
@@ -69,7 +108,7 @@ const Menu = () => {
             </SafeAreaView>
 
             <View>
-                
+
                 <View style={styles.containerCardapio}>
                     <Text style={styles.textCardapio}>Cardápio</Text>
                     <FlatList
@@ -87,6 +126,8 @@ const Menu = () => {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: "white",
+        width: '100%',
+        height: '100%'
     },
     textPromocao: {
       fontWeight: "bold",
@@ -108,7 +149,6 @@ const styles = StyleSheet.create({
         elevation: 4,
     },
     infoPromo: {
-        
         flexDirection: "row",
         alignItems: "center",
         justifyContent:"space-between"
@@ -146,6 +186,7 @@ const styles = StyleSheet.create({
 
     },
     containerCardapio: {
+        height: '100%',
         padding: 10,
     },
     itemContainer: {
@@ -169,7 +210,6 @@ const styles = StyleSheet.create({
         width: "100%",
         height: "50%",
         resizeMode: "contain",
-        aspectRatio: 1,
     },
     itemName: {
         fontSize: 14,
@@ -185,4 +225,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Menu;
+export default HomeClientScreen;
