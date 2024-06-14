@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TextInput, FlatList, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TextInput, FlatList, Image, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import api from "../../../../api";
@@ -45,21 +45,20 @@ const HomeClientScreen = () => {
                 image_path: require("../../../../assets/products/sacole.png"),
                 price: 3
             },
-
-        ]
+        ];
         setItems(products);
         setLoading(false);
-    //   api.get('/products')
-    //       .then(({ data }) => {
-    //           console.log(data);
-    //           setItems(data.products);
-    //           setLoading(false);
-    //       })
-    //       .catch((err) => setLoading(false));
+        // api.get('/products')
+        //     .then(({ data }) => {
+        //         console.log(data);
+        //         setItems(data.products);
+        //         setLoading(false);
+        //     })
+        //     .catch((err) => setLoading(false));
     }, []);
 
     function addItemInCart(product) {
-        console.log(product.id)
+        console.log(product.id);
         // api.post('/cart/create', {
         //     product_id: product.id,
         //     quantity: 1
@@ -73,8 +72,8 @@ const HomeClientScreen = () => {
     const renderProducts = ({ item }) => (
         <View style={styles.itemContainer}>
             <Image source={item.image_path} style={styles.itemImage} />
-            <Text style={styles.itemName}>{ item.name }</Text>
-            <Text style={styles.itemDetails}>R$ {item.price.toFixed(2) }</Text>
+            <Text style={styles.itemName}>{item.name}</Text>
+            <Text style={styles.itemDetails}>R$ {item.price.toFixed(2)}</Text>
             <TouchableOpacity onPress={() => addItemInCart(item)}>
                 <Image style={styles.itemAddImage} source={require("../../../../assets/mais.png")} />
             </TouchableOpacity>
@@ -83,54 +82,58 @@ const HomeClientScreen = () => {
 
     if (loading) {
         return (
-          <View style={styles.loadingContainer}>
-            <Text>Carregando...</Text>
-          </View>
+            <View style={styles.loadingContainer}>
+                <Text>Carregando...</Text>
+            </View>
         );
-      }
+    }
 
     return (
-        <View style={styles.container}>
-            <SafeAreaView>
-                <Text style={styles.textPromocao}>Promoção</Text>
-                <TouchableOpacity>
-                    <View style={styles.promocao}>
-                        <View style={styles.infoPromo}>
-                            <View style={styles.ofertaContainer}>
-                            <Text style={styles.oferta}>Salgado + Suco</Text>
-                            <Text style={styles.ofertaPreco}>Por Apenas R$9,00</Text>
+        <ScrollView style={styles.scrollView}>
+            <View style={styles.container}>
+                <SafeAreaView>
+                    <Text style={styles.textPromocao}>Promoção</Text>
+                    <TouchableOpacity>
+                        <View style={styles.promocao}>
+                            <View style={styles.infoPromo}>
+                                <View style={styles.ofertaContainer}>
+                                    <Text style={styles.oferta}>Salgado + Suco</Text>
+                                    <Text style={styles.ofertaPreco}>Por Apenas R$9,00</Text>
+                                </View>
+
+                                <Image style={styles.imageCombo} source={require("../../../../assets/products/combo.jpg")} />
                             </View>
-
-                            <Image style={styles.imageCombo} source={require("../../../../assets/products/combo.jpg")} />
                         </View>
+                    </TouchableOpacity>
+                </SafeAreaView>
+
+                <View>
+                    <View style={styles.containerCardapio}>
+                        <Text style={styles.textCardapio}>Cardápio</Text>
+                        <FlatList
+                            data={items}
+                            renderItem={renderProducts}
+                            keyExtractor={item => item.id.toString()}
+                            numColumns={2}
+                        />
                     </View>
-                </TouchableOpacity>
-            </SafeAreaView>
-
-            <View>
-
-                <View style={styles.containerCardapio}>
-                    <Text style={styles.textCardapio}>Cardápio</Text>
-                    <FlatList
-                        data={items}
-                        renderItem={renderProducts}
-                        keyExtractor={item => item.id}
-                        numColumns={2}
-                    />
                 </View>
             </View>
-        </View>
+        </ScrollView>
     );
 };
 
 const styles = StyleSheet.create({
+    scrollView: {
+        backgroundColor: "white",
+    },
     container: {
         backgroundColor: "white",
         width: '100%',
         height: '100%'
     },
     textPromocao: {
-      fontWeight: "bold",
+        fontWeight: "bold",
         fontSize: 24,
         padding: 10,
     },
@@ -151,13 +154,12 @@ const styles = StyleSheet.create({
     infoPromo: {
         flexDirection: "row",
         alignItems: "center",
-        justifyContent:"space-between"
+        justifyContent: "space-between"
     },
-    ofertaContainer:
-    {
-        display:"flex",
-        alignItems:"center",
-        padding:10,
+    ofertaContainer: {
+        display: "flex",
+        alignItems: "center",
+        padding: 10,
     },
     oferta: {
         textAlign: "center",
@@ -165,8 +167,7 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         color: "white",
     },
-    ofertaPreco:
-    {
+    ofertaPreco: {
         textAlign: "center",
         fontSize: 22,
         padding: 10,
@@ -175,18 +176,16 @@ const styles = StyleSheet.create({
     },
     imageCombo: {
         width: 100,
-        height:100,
+        height: 100,
         aspectRatio: 1,
         borderRadius: 10,
     },
     textCardapio: {
         fontSize: 24,
         fontWeight: "bold",
-        margin:10,
-
+        margin: 10,
     },
     containerCardapio: {
-        height: '100%',
         padding: 10,
     },
     itemContainer: {
@@ -208,7 +207,7 @@ const styles = StyleSheet.create({
     },
     itemImage: {
         width: "100%",
-        height: "50%",
+        height: 100,
         resizeMode: "contain",
     },
     itemName: {
@@ -222,6 +221,11 @@ const styles = StyleSheet.create({
     itemAddImage: {
         width: 25,
         height: 25,
+    },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
     },
 });
 
