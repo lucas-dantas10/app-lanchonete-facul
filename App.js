@@ -11,13 +11,14 @@ import CartScreen from "./src/views/Cart/CartScreen.js";
 import ProfileScreen from "./src/views/Profile/ProfileScreen.js";
 import { Buffer } from 'buffer'
 
+
 window.Buffer = window.Buffer ?? Buffer
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 function App() {
-    const [isLogged, setIsLogged] = useState(true);
+    const [isLogged, setIsLogged] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
 
     return isLogged ? (
