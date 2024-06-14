@@ -20,14 +20,15 @@ const Menu = () => {
     }, []);
 
     function addItemInCart(product) {
-        api.post('/cart/create', {
-            product_id: product.id,
-            quantity: 1
-        })
-        .then(({data}) => {
-            console.log(data)
-            setLoading(false);
-        });
+        console.log(product.id)
+        // api.post('/cart/create', {
+        //     product_id: product.id,
+        //     quantity: 1
+        // })
+        // .then(({data}) => {
+        //     console.log(data)
+        //     setLoading(false);
+        // });
     }
 
     const renderProducts = ({ item }) => (
