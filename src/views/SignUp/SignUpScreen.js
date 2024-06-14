@@ -6,10 +6,12 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
 import * as Animatable from "react-native-animatable";
-import check from "../../../assets/check.png";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import api from '../../../api';
 
 function SignUpScreen() {
@@ -41,7 +43,7 @@ function SignUpScreen() {
     }
 
     setErrors(newErrors);
-    if (inputSchool !== null && inputUser && inputPassword.length >= 6) {
+    if (Object.keys(newErrors).length === 0) {
       setShowPerfect(true);
     } else {
       setShowPerfect(false);
@@ -50,90 +52,103 @@ function SignUpScreen() {
 
   const handleSubmit = () => {
     validateForm();
+    if (Object.keys(errors).length > 0) {
+      console.log("Erros no formulário:", errors);
+      Alert.alert(
+        "Atenção!",
+        "Verifique se todos os campos estão preenchidos corretamente.",
+        [{ text: "OK", onPress: () => console.log("Alerta de erro fechado") }],
+        { cancelable: false }
+      );
+      return;
+    }
 
     const data = {
-        email: inputUser,
-        school: inputSchool,
-        password: inputPassword,
+      email: inputUser,
+      school: inputSchool,
+      password: inputPassword,
     };
 
     api.post('/create/user', data)
-        .then(({ data }) => {
-            if (Object.keys(errors).length === 0) {
-                Alert.alert(
-                  "Sucesso!",
-                  "Cadastro Realizado Com Sucesso!",
-                  [
-                    {
-                      text: "OK",
-                      onPress: () => console.log("Alerta de sucesso fechado"),
-                    },
-                  ],
-                  { cancelable: false }
-                );
-              }
-        })
-        .catch (() => {
-            Alert.alert(
-                "Atenção!",
-                "Erro ao cadastrar usuário! Verifique se está preenchido corretamente.",
-                [{ text: "OK", onPress: () => console.log("Alerta de erro fechado") }],
-                { cancelable: false }
-              );
-        });
+      .then(({ data }) => {
+        Alert.alert(
+          "Sucesso!",
+          "Cadastro Realizado Com Sucesso!",
+          [
+            {
+              text: "OK",
+              onPress: () => console.log("Alerta de sucesso fechado"),
+            },
+          ],
+          { cancelable: false }
+        );
+      })
+      .catch((error) => {
+        console.log("Erro ao cadastrar usuário:", error);
+        Alert.alert(
+          "Atenção!",
+          "Erro ao cadastrar usuário! Verifique se está preenchido corretamente.",
+          [{ text: "OK", onPress: () => console.log("Alerta de erro fechado") }],
+          { cancelable: false }
+        );
+      });
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Cadastro</Text>
-      <View style={styles.input}>
-        <RNPickerSelect
-          onValueChange={(value) => setSchool(value)}
-          items={[
-            { label: "Escola 1", value: "Escola 1" },
-            { label: "Escola 2", value: "Escola 2" },
-            { label: "Escola 3", value: "Escola 3" },
-          ]}
-          placeholder={{ label: "Selecione Sua Escola", value: null }}
-        />
-      </View>
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        onChangeText={setUser}
-        value={inputUser}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Senha"
-        onChangeText={setPassword}
-        value={inputPassword}
-        secureTextEntry
-      />
+    <KeyboardAwareScrollView contentContainerStyle={{ flex: 1 }}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.container}>
+          <Text style={styles.text}>Cadastro</Text>
+          <View style={styles.input}>
+            <RNPickerSelect
+              onValueChange={(value) => setSchool(value)}
+              items={[
+                { label: "Escola 1", value: "Escola 1" },
+                { label: "Escola 2", value: "Escola 2" },
+                { label: "Escola 3", value: "Escola 3" },
+              ]}
+              placeholder={{ label: "Selecione Sua Escola", value: null }}
+            />
+          </View>
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            onChangeText={setUser}
+            value={inputUser}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Senha"
+            onChangeText={setPassword}
+            value={inputPassword}
+            secureTextEntry
+          />
 
-      {errors.inputSchool && (
-        <Text style={styles.error}>{errors.inputSchool}</Text>
-      )}
-      {errors.inputUser && <Text style={styles.error}>{errors.inputUser}</Text>}
-      {errors.inputPassword && (
-        <Text style={styles.error}>{errors.inputPassword}</Text>
-      )}
+          {errors.inputSchool && (
+            <Text style={styles.error}>{errors.inputSchool}</Text>
+          )}
+          {errors.inputUser && <Text style={styles.error}>{errors.inputUser}</Text>}
+          {errors.inputPassword && (
+            <Text style={styles.error}>{errors.inputPassword}</Text>
+          )}
 
-      {showPerfect && (
-        <Animatable.Text
-          animation="fadeIn"
-          duration={500}
-          style={styles.success}
-        >
-          Clique em Cadastre-se para Prosseguir
-          <Text style={styles.check}> ✓</Text>
-        </Animatable.Text>
-      )}
+          {showPerfect && (
+            <Animatable.Text
+              animation="fadeIn"
+              duration={500}
+              style={styles.success}
+            >
+              Clique em Cadastre-se para Prosseguir
+              <Text style={styles.check}> ✓</Text>
+            </Animatable.Text>
+          )}
 
-      <TouchableOpacity style={styles.buttonLogin} onPress={handleSubmit}>
-        <Text>Cadastre-se</Text>
-      </TouchableOpacity>
-    </View>
+          <TouchableOpacity style={styles.buttonLogin} onPress={handleSubmit}>
+            <Text>Cadastre-se</Text>
+          </TouchableOpacity>
+        </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAwareScrollView>
   );
 }
 
@@ -143,6 +158,7 @@ const styles = StyleSheet.create({
     padding: 24,
     backgroundColor: "#fff",
     alignItems: "center",
+    justifyContent: "center", // Centraliza verticalmente
   },
   text: {
     fontSize: 30,
@@ -152,7 +168,7 @@ const styles = StyleSheet.create({
   },
   input: {
     width: "90%",
-    margin: 12,
+    marginVertical: 10,
     borderRadius: 16,
     padding: 14,
     backgroundColor: "#e3e3e3",
@@ -161,7 +177,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     width: "90%",
-    margin: 12,
+    marginVertical: 10,
     borderRadius: 16,
     padding: 20,
     backgroundColor: "#ffbc0d",
