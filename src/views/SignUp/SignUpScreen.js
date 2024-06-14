@@ -90,9 +90,9 @@ function SignUpScreen() {
         <RNPickerSelect
           onValueChange={(value) => setSchool(value)}
           items={[
-            { label: "Escola 1", value: "Escola 1" },
-            { label: "Escola 2", value: "Escola 2" },
-            { label: "Escola 3", value: "Escola 3" },
+            { label: "Colégio Silva Abreu", value: "Colégio Silva Abreu" },
+            { label: "Colégio Campinho Filial", value: "Colégio Campinho Filial" },
+            { label: "Colégio Campinho Matriz", value: "Colégio Campinho Matriz" },
           ]}
           placeholder={{ label: "Selecione Sua Escola", value: null }}
         />
