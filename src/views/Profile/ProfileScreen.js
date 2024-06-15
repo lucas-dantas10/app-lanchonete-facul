@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, Button, Platform } from 'react-native';
+import { View, Text, StyleSheet, Image, Button, Platform, TouchableOpacity } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 
 const ProfileScreen = () => {
@@ -27,6 +27,12 @@ const ProfileScreen = () => {
     }
   };
 
+  const handleLogout = () => {
+    // Lógica para fazer logout da conta
+    // Aqui você pode adicionar o código para limpar o token de autenticação, etc.
+    console.log('Sair da conta');
+  };
+
   return (
     <View style={styles.container}>
       <Image
@@ -48,6 +54,10 @@ const ProfileScreen = () => {
         <Text style={styles.orderLabel}>Pedido Atual</Text>
         <Text style={styles.orderContent}>Nenhum pedido no momento</Text>
       </View>
+
+      <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
+        <Text style={styles.logoutText}>Sair da conta</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -116,6 +126,18 @@ const styles = StyleSheet.create({
   orderContent: {
     fontSize: 16,
     color: '#555',
+  },
+  logoutButton: {
+    marginTop: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    backgroundColor: '#f00', // Cor de fundo do botão
+    borderRadius: 10,
+  },
+  logoutText: {
+    fontSize: 16,
+    color: '#fff', // Cor do texto do botão
+    textAlign: 'center',
   },
 });
 
