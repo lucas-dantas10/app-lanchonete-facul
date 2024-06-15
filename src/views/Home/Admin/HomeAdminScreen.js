@@ -27,6 +27,18 @@ const HomeAdminScreen = () => {
           <Text style={styles.text}>Valor: R$ {totalValue}</Text>
           <Text style={styles.text}>Quantidade Total: {totalQuantity} item(s)</Text>
           <Text style={styles.text}>Token: {item.token_order}</Text>
+          <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            style={[styles.button, styles.finalizeButton]}
+          >
+            <Text style={styles.buttonText}>Finalizar</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.button, styles.cancelButton]}
+          >
+            <Text style={styles.buttonText}>Cancelar</Text>
+          </TouchableOpacity>
+        </View>
         </View>
       );
   }
@@ -79,8 +91,35 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 18,
     fontWeight: "bold",
-    lineHeight: "25px",
-    letterSpacing:".5px",
+    lineHeight: 25,
+    letterSpacing: 0.5,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+  },
+  button: {
+    flex: 1,
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginHorizontal: 5,
+  },
+  finalizeButton: {
+    backgroundColor: 'green',
+  },
+  cancelButton: {
+    backgroundColor: 'red',
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 
