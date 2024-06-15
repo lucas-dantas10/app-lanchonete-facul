@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TextInput, FlatList, Image, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
+import { View, Text, TextInput, FlatList, Image, TouchableOpacity, StyleSheet, ScrollView, Animated } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import api from "../../../../api";
@@ -7,44 +7,33 @@ import api from "../../../../api";
 const HomeClientScreen = () => {
     const [items, setItems] = useState("");
     const [loading, setLoading] = useState(true);
+    const [fadeAnim] = useState(new Animated.Value(0));
+    const [quantities, setQuantities] = useState({});
 
     useEffect(() => {
         const products = [
             {
-                id: 9,
+                id: 1,
                 name: "Biscoito de Polvilho",
                 description: "Biscoito de Polvilho Salgado",
                 image_path: require("../../../../assets/products/sacole.png"),
                 price: 3
             },
             {
-                id: 10,
+                id: 2,
                 name: "Biscoito de Polvilho",
                 description: "Biscoito de Polvilho Salgado",
                 image_path: require("../../../../assets/products/sacole.png"),
                 price: 3
             },
             {
-                id: 11,
+                id: 3,
                 name: "Biscoito de Polvilho",
                 description: "Biscoito de Polvilho Salgado",
                 image_path: require("../../../../assets/products/sacole.png"),
                 price: 3
             },
-            {
-                id: 12,
-                name: "Biscoito de Polvilho",
-                description: "Biscoito de Polvilho Salgado",
-                image_path: require("../../../../assets/products/sacole.png"),
-                price: 3
-            },
-            {
-                id: 13,
-                name: "Biscoito de Polvilho",
-                description: "Biscoito de Polvilho Salgado",
-                image_path: require("../../../../assets/products/sacole.png"),
-                price: 3
-            },
+            // ... (outros produtos)
         ];
         setItems(products);
         setLoading(false);
@@ -55,29 +44,56 @@ const HomeClientScreen = () => {
         //         setLoading(false);
         //     })
         //     .catch((err) => setLoading(false));
+
+        // Animação de fade-in
+        Animated.timing(fadeAnim, {
+            toValue: 1,
+            duration: 1000,
+            useNativeDriver: true,
+        }).start();
     }, []);
 
     function addItemInCart(product) {
-        console.log(product.id);
+        const quantity = quantities[product.id] || 1; // Quantidade padrão é 1 se não especificada
+        console.log(`Adicionar ${quantity} de ${product.name} ao carrinho`);
+
+        // Simular adição ao carrinho (substituir pelo chamado da API real)
         // api.post('/cart/create', {
         //     product_id: product.id,
-        //     quantity: 1
+        //     quantity: quantity
         // })
         // .then(({data}) => {
-        //     console.log(data)
+        //     console.log(data);
         //     setLoading(false);
         // });
     }
 
+    const handleChangeQuantity = (product, value) => {
+        const newQuantities = {
+            ...quantities,
+            [product.id]: value,
+        };
+        setQuantities(newQuantities);
+    };
+
     const renderProducts = ({ item }) => (
-        <View style={styles.itemContainer}>
+        <Animated.View style={[styles.itemContainer, { opacity: fadeAnim }]}>
             <Image source={item.image_path} style={styles.itemImage} />
             <Text style={styles.itemName}>{item.name}</Text>
             <Text style={styles.itemDetails}>R$ {item.price.toFixed(2)}</Text>
-            <TouchableOpacity onPress={() => addItemInCart(item)}>
-                <Image style={styles.itemAddImage} source={require("../../../../assets/mais.png")} />
+            <View style={styles.quantityContainer}>
+                <TouchableOpacity onPress={() => handleChangeQuantity(item, (quantities[item.id] || 0) + 1)}>
+                    <Feather name="plus" size={24} color="#333" />
+                </TouchableOpacity>
+                <Text style={styles.quantityText}>{quantities[item.id] || 1}</Text>
+                <TouchableOpacity onPress={() => handleChangeQuantity(item, Math.max((quantities[item.id] || 1) - 1, 1))}>
+                    <Feather name="minus" size={24} color="#333" />
+                </TouchableOpacity>
+            </View>
+            <TouchableOpacity onPress={() => addItemInCart(item)} style={styles.addButton}>
+            <Image style={styles.itemAddImage} source={require("../../../../assets/mais.png")} />
             </TouchableOpacity>
-        </View>
+        </Animated.View>
     );
 
     if (loading) {
@@ -100,7 +116,6 @@ const HomeClientScreen = () => {
                                     <Text style={styles.oferta}>Salgado + Suco</Text>
                                     <Text style={styles.ofertaPreco}>Por Apenas R$9,00</Text>
                                 </View>
-
                                 <Image style={styles.imageCombo} source={require("../../../../assets/products/combo.jpg")} />
                             </View>
                         </View>
@@ -115,6 +130,7 @@ const HomeClientScreen = () => {
                             renderItem={renderProducts}
                             keyExtractor={item => item.id.toString()}
                             numColumns={2}
+                            contentContainerStyle={styles.flatListContent}
                         />
                     </View>
                 </View>
@@ -128,25 +144,22 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
     },
     container: {
-        backgroundColor: "white",
-        width: '100%',
-        height: '100%'
+        backgroundColor: "#f8f9fa",
+        flex: 1,
     },
     textPromocao: {
         fontWeight: "bold",
         fontSize: 24,
         padding: 10,
+        color: "#333",
     },
     promocao: {
         backgroundColor: "#DA291C",
         margin: 10,
-        padding: 10,
+        padding: 15,
         borderRadius: 10,
         shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 3,
-        },
+        shadowOffset: { width: 0, height: 3 },
         shadowOpacity: 0.17,
         shadowRadius: 3.05,
         elevation: 4,
@@ -154,7 +167,7 @@ const styles = StyleSheet.create({
     infoPromo: {
         flexDirection: "row",
         alignItems: "center",
-        justifyContent: "space-between"
+        justifyContent: "space-between",
     },
     ofertaContainer: {
         display: "flex",
@@ -184,6 +197,7 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: "bold",
         margin: 10,
+        color: "#333",
     },
     containerCardapio: {
         padding: 10,
@@ -192,15 +206,12 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: "center",
         gap: 10,
-        backgroundColor: "#e9e9e7",
+        backgroundColor: "#ffffff",
         margin: 10,
-        padding: 5,
+        padding: 10,
         borderRadius: 10,
         shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 3,
-        },
+        shadowOffset: { width: 0, height: 3 },
         shadowOpacity: 0.17,
         shadowRadius: 3.05,
         elevation: 4,
@@ -211,21 +222,49 @@ const styles = StyleSheet.create({
         resizeMode: "contain",
     },
     itemName: {
-        fontSize: 14,
+        fontSize: 16,
         fontWeight: "bold",
+        color: "#333",
     },
     itemDetails: {
         fontWeight: "bold",
         color: "#c4a600",
     },
-    itemAddImage: {
-        width: 25,
-        height: 25,
+    addButton: {
+        backgroundColor: "#28a745",
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 5,
+        marginTop: 10,
+        alignItems: "center",
+    },
+    addButtonText: {
+        color: "#fff",
+        fontSize: 16,
+        fontWeight: "bold",
+    },
+    quantityContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        marginVertical: 10,
+    },
+    quantityText: {
+        marginHorizontal: 20,
+        fontSize: 18,
+        fontWeight: "bold",
+    },
+    flatListContent: {
+        paddingBottom: 20,
     },
     loadingContainer: {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
+    },
+    itemAddImage: {
+        width: 25,
+        height: 25,
     },
 });
 
