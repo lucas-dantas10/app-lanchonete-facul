@@ -12,6 +12,7 @@ import {
 import LoginPNG from "../../../assets/LogoLogin.png";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import * as Animatable from "react-native-animatable";
 
 function LoginScreen({ navigation, route }) {
   const [inputUsuario, onChangeUsuario] = useState("");
@@ -52,13 +53,22 @@ function LoginScreen({ navigation, route }) {
       contentContainerStyle={styles.container}
       keyboardShouldPersistTaps="handled"
     >
-      <View style={styles.inner}>
-        <Image style={styles.LoginPNG} source={LoginPNG} resizeMode="fill" />
+      <Animatable.View animation="fadeInUp" style={styles.inner}>
+        <Animatable.Image
+          animation="pulse"
+          easing="ease-out"
+          iterationCount="infinite"
+          style={styles.LoginPNG}
+          source={LoginPNG}
+          resizeMode="contain"
+        />
         <TextInput
           style={styles.input}
           placeholder="Email"
           onChangeText={(text) => onChangeUsuario(text)}
           value={inputUsuario}
+          keyboardType="email-address"
+          autoCapitalize="none"
         />
         <TextInput
           style={styles.input}
@@ -73,19 +83,26 @@ function LoginScreen({ navigation, route }) {
           style={styles.buttonRegister}
         >
           <Text style={styles.textRegister}>
-            Não Possui uma Conta?{" "}
-            <Text style={{ color: "blue" }}>Cadastre-se</Text>
+            Não possui uma conta? <Text style={{ color: "#007BFF" }}>Cadastre-se</Text>
           </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          disabled={inputUsuario !== "" && inputSenha !== ""}
           onPress={login}
-          style={styles.buttonLogin}
+          style={[
+            styles.buttonLogin,
+            {
+              backgroundColor:
+                inputUsuario !== "" && inputSenha !== ""
+                  ? "#ffbc0d"
+                  : "#ddd",
+            },
+          ]}
+          disabled={inputUsuario === "" || inputSenha === ""}
         >
-          <Text>Login</Text>
+          <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
-      </View>
+      </Animatable.View>
     </KeyboardAwareScrollView>
   );
 }
@@ -107,7 +124,9 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     borderRadius: 16,
     padding: 14,
-    backgroundColor: "#e3e3e3",
+    backgroundColor: "#f0f0f0",
+    borderWidth: 1,
+    borderColor: "#ddd",
   },
   buttonRegister: {
     marginVertical: 4,
@@ -122,12 +141,16 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     borderRadius: 16,
     padding: 20,
-    backgroundColor: "#ffbc0d",
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
   },
   LoginPNG: {
-    width: "60%",
-    height: 240,
-    position: "relative", // Altura fixa da imagem (ajuste conforme necessário para preencher a tela inicialmente)
+    width: "80%",
+    height: 200,
+    marginBottom: 20,
   },
 });
 
