@@ -1,13 +1,40 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Image, Button, Platform } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 
 const ProfileScreen = () => {
+  const [profileImage, setProfileImage] = useState('https://via.placeholder.com/150');
+
+  const selectImage = async () => {
+    if (Platform.OS !== 'web') {
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== 'granted') {
+        alert('Desculpe, precisamos de permissões de câmera para fazer isso funcionar!');
+        return;
+      }
+    }
+
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      console.log(result.assets[0].uri);
+      setProfileImage(result.assets[0].uri);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Image
-        source={{ uri: 'https://via.placeholder.com/150' }} // URL da imagem de perfil (substitua pela sua própria imagem)
+        source={{ uri: profileImage }}
         style={styles.profileImage}
       />
+      <Button title="Selecionar Imagem" onPress={selectImage} />
+
       <Text style={styles.username}>Juvenal</Text>
 
       <View style={styles.detailsContainer}>
@@ -61,12 +88,12 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   detailLabel: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 5,
   },
   detailValue: {
-    fontSize: 14,
+    fontSize: 16,
     color: '#555',
   },
   orderContainer: {
