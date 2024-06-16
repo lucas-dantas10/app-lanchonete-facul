@@ -13,38 +13,15 @@ import LoginPNG from "../../../assets/LogoLogin.png";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import * as Animatable from "react-native-animatable";
+import { useAuth } from "../../components/Auth/AuthContext";
 
 function LoginScreen({ navigation, route }) {
   const [inputUsuario, onChangeUsuario] = useState("");
   const [inputSenha, onChangeSenha] = useState("");
+  const { login } = useAuth();
 
-  async function login() {
-    try {
-      const response = await api.post("/login", {
-        email: inputUsuario,
-        password: inputSenha,
-      });
-      const { user, token } = response.data;
-
-      await AsyncStorage.setItem("user", JSON.stringify(user));
-      await AsyncStorage.setItem("token", token);
-
-      route.params.isLogado(true);
-      route.params.isAdmin(false);
-
-      if (user.is_admin) {
-        route.params.isAdmin(true);
-      }
-    } catch (error) {
-      Alert.alert("Erro", "Email ou Senha incorretos!", [
-        {
-          text: "OK",
-          onPress: () => console.log("OK Pressed"),
-        },
-      ]);
-    } finally {
-      navigation.navigate("Home");
-    }
+  const handleLogin = async () => {
+    await login (inputUsuario, inputSenha);
   }
 
   return (
@@ -88,7 +65,7 @@ function LoginScreen({ navigation, route }) {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={login}
+          onPress={handleLogin}
           style={[
             styles.buttonLogin,
             {

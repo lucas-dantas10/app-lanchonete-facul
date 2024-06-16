@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -12,6 +12,8 @@ import HomeAdminScreen from "./src/views/Home/Admin/HomeAdminScreen.js";
 import CartScreen from "./src/views/Cart/CartScreen.js";
 import ProfileScreen from "./src/views/Profile/ProfileScreen.js";
 
+import { AuthProvider, useAuth } from './src/components/Auth/AuthContext.js';
+
 // Definindo o Buffer globalmente se não estiver definido (para compatibilidade)
 if (typeof window !== 'undefined') {
     window.Buffer = window.Buffer || Buffer;
@@ -20,14 +22,10 @@ if (typeof window !== 'undefined') {
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
-function AuthNavigator({ setIsLogged, setIsAdmin }) {
+function AuthNavigator() {
     return (
         <Stack.Navigator initialRouteName="Login">
-            <Stack.Screen
-                name="Login"
-                component={LoginScreen}
-                initialParams={{ isLogado: setIsLogged, isAdmin: setIsAdmin }}
-            />
+            <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="Cadastro" component={SignUpScreen} />
         </Stack.Navigator>
     );
@@ -87,18 +85,21 @@ function AdminTabNavigator() {
 }
 
 function App() {
-    const [isLogged, setIsLogged] = useState(false);
-    const [isAdmin, setIsAdmin] = useState(false);
+    const { isLoggedIn, isAdmin } = useAuth(); 
 
     return (
         <NavigationContainer>
-            {isLogged ? (
+            {isLoggedIn ? (
                 isAdmin ? <AdminTabNavigator /> : <ClientTabNavigator />
             ) : (
-                <AuthNavigator setIsLogged={setIsLogged} setIsAdmin={setIsAdmin} />
+                <AuthNavigator />
             )}
         </NavigationContainer>
     );
 }
 
-export default App;
+export default () => (
+    <AuthProvider>
+        <App />
+    </AuthProvider>
+);

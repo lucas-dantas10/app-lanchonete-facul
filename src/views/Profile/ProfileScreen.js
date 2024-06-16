@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, Button, Platform, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, Button, Platform, TouchableOpacity, Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import api from '../../../api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useAuth } from '../../components/Auth/AuthContext';
 
-const ProfileScreen = () => {
+const ProfileScreen = ({navigation}) => {
   const [profileImage, setProfileImage] = useState('https://via.placeholder.com/150');
+  const { logout } = useAuth();
 
   const selectImage = async () => {
     if (Platform.OS !== 'web') {
@@ -28,9 +32,7 @@ const ProfileScreen = () => {
   };
 
   const handleLogout = () => {
-    // Lógica para fazer logout da conta
-    // Aqui você pode adicionar o código para limpar o token de autenticação, etc.
-    console.log('Sair da conta');
+    logout();
   };
 
   return (
