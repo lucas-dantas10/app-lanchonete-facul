@@ -39,7 +39,7 @@ function ClientTabNavigator() {
             screenOptions={{ headerShown: false, activeTintColor: "#808080", inactiveTintColor: "#FFD700" }}
         >
             <Tab.Screen
-                name="Home"
+                name="Client"
                 component={HomeClientScreen}
                 options={{
                     tabBarIcon: ({ color, size }) => <Feather name="home" color={color} size={size} />,
@@ -69,7 +69,7 @@ function AdminTabNavigator() {
             screenOptions={{ headerShown: false, activeTintColor: "#808080", inactiveTintColor: "#FFD700" }}
         >
             <Tab.Screen
-                name="Home"
+                name="Admin"
                 component={HomeAdminScreen}
                 options={{
                     tabBarIcon: ({ color, size }) => <Feather name="home" color={color} size={size} />,
