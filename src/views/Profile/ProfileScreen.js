@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, Button, Platform, TouchableOpacity, Alert } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import api from '../../../api';
@@ -7,7 +7,14 @@ import { useAuth } from '../../components/Auth/AuthContext';
 
 const ProfileScreen = ({navigation}) => {
   const [profileImage, setProfileImage] = useState('https://via.placeholder.com/150');
+  const [user, setUser] = useState("");
   const { logout } = useAuth();
+
+  useEffect(async () => {
+    const userData = await AsyncStorage.getItem('user');
+    setProfileImage(JSON.parse(userData).image_url);
+    setUser(JSON.parse(userData));
+  }, []);
 
   const selectImage = async () => {
     if (Platform.OS !== 'web') {
@@ -43,19 +50,19 @@ const ProfileScreen = ({navigation}) => {
       />
       <Button title="Selecionar Imagem" onPress={selectImage} />
 
-      <Text style={styles.username}>Juvenal</Text>
+      <Text style={styles.username}>{user.name}</Text>
 
       <View style={styles.detailsContainer}>
         <View style={styles.detailItem}>
           <Text style={styles.detailLabel}>Escola</Text>
-          <Text style={styles.detailValue}>Santa Barbara</Text>
+          <Text style={styles.detailValue}>{user.school}</Text>
         </View>
       </View>
 
-      <View style={styles.orderContainer}>
+      {/* <View style={styles.orderContainer}>
         <Text style={styles.orderLabel}>Pedido Atual</Text>
         <Text style={styles.orderContent}>Nenhum pedido no momento</Text>
-      </View>
+      </View> */}
 
       <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
         <Text style={styles.logoutText}>Sair da conta</Text>
