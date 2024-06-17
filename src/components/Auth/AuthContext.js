@@ -1,12 +1,13 @@
 import { createContext, useContext, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import api from "../../../api";
+import { Alert } from "react-native";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [isLoggedIn, setIsLoggedIn] = useState(true);
-    const [isAdmin, setIsAdmin] = useState(true);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
 
     const login = async (email, password) => {
         try {
