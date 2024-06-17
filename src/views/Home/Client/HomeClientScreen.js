@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TextInput, FlatList, Image, TouchableOpacity, StyleSheet, ScrollView, Animated } from "react-native";
+import { View, Text, TextInput, FlatList, Image, TouchableOpacity, StyleSheet, ScrollView, Animated, Alert } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import api from "../../../../api";
@@ -11,61 +11,63 @@ const HomeClientScreen = () => {
     const [quantities, setQuantities] = useState({});
 
     useEffect(() => {
-        const products = [
-            {
-                id: 1,
-                name: "Biscoito de Polvilho",
-                description: "Biscoito de Polvilho Salgado",
-                image_path: require("../../../../assets/products/sacole.png"),
-                price: 3
-            },
-            {
-                id: 2,
-                name: "Biscoito de Polvilho",
-                description: "Biscoito de Polvilho Salgado",
-                image_path: require("../../../../assets/products/sacole.png"),
-                price: 3
-            },
-            {
-                id: 3,
-                name: "Biscoito de Polvilho",
-                description: "Biscoito de Polvilho Salgado",
-                image_path: require("../../../../assets/products/sacole.png"),
-                price: 3
-            },
-            // ... (outros produtos)
-        ];
-        setItems(products);
-        setLoading(false);
-        // api.get('/products')
-        //     .then(({ data }) => {
-        //         console.log(data);
-        //         setItems(data.products);
-        //         setLoading(false);
-        //     })
-        //     .catch((err) => setLoading(false));
+        // const products = [
+        //     {
+        //         id: 1,
+        //         name: "Biscoito de Polvilho",
+        //         description: "Biscoito de Polvilho Salgado",
+        //         image_path: require("../../../../assets/products/sacole.png"),
+        //         price: 3
+        //     },
+        //     {
+        //         id: 2,
+        //         name: "Biscoito de Polvilho",
+        //         description: "Biscoito de Polvilho Salgado",
+        //         image_path: require("../../../../assets/products/sacole.png"),
+        //         price: 3
+        //     },
+        //     {
+        //         id: 3,
+        //         name: "Biscoito de Polvilho",
+        //         description: "Biscoito de Polvilho Salgado",
+        //         image_path: require("../../../../assets/products/sacole.png"),
+        //         price: 3
+        //     },
+        //     // ... (outros produtos)
+        // ];
+        // setItems(products);
+        // setLoading(false);
+         api.get('/products')
+             .then(({ data }) => {
+                 setItems(data.products);
+                 setLoading(false);
+             })
+             .catch((err) => setLoading(false));
 
-        // Animação de fade-in
-        Animated.timing(fadeAnim, {
-            toValue: 1,
-            duration: 1000,
-            useNativeDriver: true,
-        }).start();
+         Animated.timing(fadeAnim, {
+             toValue: 1,
+             duration: 1000,
+             useNativeDriver: true,
+         }).start();
     }, []);
 
     function addItemInCart(product) {
-        const quantity = quantities[product.id] || 1; // Quantidade padrão é 1 se não especificada
-        console.log(`Adicionar ${quantity} de ${product.name} ao carrinho`);
+        const quantity = quantities[product.id] || 1; 
+        console.log(`id: ${product.id} | Adicionar ${quantity} de ${product.name} ao carrinho`);
 
-        // Simular adição ao carrinho (substituir pelo chamado da API real)
-        // api.post('/cart/create', {
-        //     product_id: product.id,
-        //     quantity: quantity
-        // })
-        // .then(({data}) => {
-        //     console.log(data);
-        //     setLoading(false);
-        // });
+         api.post('/cart/create', {
+             product_id: product.id,
+             quantity: quantity
+         })
+         .then(({data}) => {
+            Alert.alert(
+                "Sucesso!",
+                "Item adicionado ao carrinho!",
+                [{ text: "OK", onPress: () => console.log("Alerta de erro fechado") }],
+                { cancelable: false }
+            );
+             setLoading(false);
+         });
     }
 
     const handleChangeQuantity = (product, value) => {

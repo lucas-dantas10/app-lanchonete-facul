@@ -10,11 +10,15 @@ const ProfileScreen = ({navigation}) => {
   const [user, setUser] = useState("");
   const { logout } = useAuth();
 
-  useEffect(async () => {
+  useEffect(() => {
+    setUserData();
+  }, []);
+
+  async function setUserData() {
     const userData = await AsyncStorage.getItem('user');
     setProfileImage(JSON.parse(userData).image_url);
     setUser(JSON.parse(userData));
-  }, []);
+  }
 
   const selectImage = async () => {
     if (Platform.OS !== 'web') {
