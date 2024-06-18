@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, FlatList, Image } from "react-native";
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from "react-native";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import * as Animatable from 'react-native-animatable';
 
 const UserOrderScreen = () => {
     const [order, setOrder] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [orderToken, setOrderToken] = useState("");
 
     useEffect(() => {
-        // Simulando um pedido fictício
+
         const fakeOrder = {
             user: { name: "John Doe" },
             item_order: [
@@ -16,13 +17,18 @@ const UserOrderScreen = () => {
                 { product: { name: "Batata Frita", image_path: "https://example.com/batatafrita.png" }, quantity: 1, price_unit: 10.0 },
                 { product: { name: "Refrigerante", image_path: "https://example.com/refrigerante.png" }, quantity: 3, price_unit: 5.0 }
             ],
-            status: "Cancelado", // Pode ser "Pronto", "Preparando" ou "Cancelado"
+            status: "Preparando", 
             token_order: "12345ABC"
         };
 
         setOrder(fakeOrder);
+        setOrderToken(fakeOrder.token_order);
         setLoading(false);
     }, []);
+
+    const cancelOrder = () => {
+        setOrder(null);
+    };
 
     if (loading) {
         return (
@@ -87,6 +93,12 @@ const UserOrderScreen = () => {
                         {order.status}{order.status === "Cancelado" && ": Dirija-se à recepção"}
                     </Text>
                 </View>
+                <Text style={styles.tokenText}>Token do Pedido: {orderToken}</Text>
+                {order.status !== "Cancelado" && (
+                    <TouchableOpacity onPress={cancelOrder} style={styles.cancelButton}>
+                        <Text style={styles.cancelButtonText}>Cancelar Pedido</Text>
+                    </TouchableOpacity>
+                )}
             </View>
         </View>
     );
@@ -157,6 +169,23 @@ const styles = StyleSheet.create({
     statusText: {
         fontSize: 18,
         marginLeft: 8,
+    },
+    tokenText: {
+        fontSize: 16,
+        marginTop: 10,
+        fontWeight: "bold",
+        color: "#555",
+    },
+    cancelButton: {
+        marginTop: 20,
+        backgroundColor: "red",
+        padding: 10,
+        borderRadius: 8,
+    },
+    cancelButtonText: {
+        color: "#fff",
+        fontWeight: "bold",
+        textAlign: "center",
     },
     loadingContainer: {
         flex: 1,
