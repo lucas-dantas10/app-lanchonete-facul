@@ -68,10 +68,10 @@ function SignUpScreen() {
                 { cancelable: false }
             );
         }
-
+        
         const userData = {
             name: inputName,
-            email: inputUser,
+            email:  inputUser.toLowerCase(),
             school: inputSchool,
             password: inputPassword,
         };
@@ -80,7 +80,8 @@ function SignUpScreen() {
             .then(async ({ data }) => {
                 await login(data.user.email, inputPassword);
             })
-            .catch(() => {
+            .catch((err) => {
+                console.log(err);
                 Alert.alert(
                     "Erro!",
                     "Verifique se todos os campos estão preenchidos corretamente.",
