@@ -53,6 +53,28 @@ const HomeAdminScreen = () => {
             0
         );
 
+        const getStatusText = (status) => {
+            switch (status) {
+                case 'F':
+                    return 'Finalizado';
+                case 'C':
+                    return 'Cancelado';
+                default:
+                    return 'Em andamento';
+            }
+        };
+
+        const getStatusTextStyle = (status) => {
+            switch (status) {
+                case 'F':
+                    return styles.finalizedText;
+                case 'C':
+                    return styles.cancelledText;
+                default:
+                    return styles.inProgressText;
+            }
+        };
+
         return (
             <View
                 style={[
@@ -65,21 +87,21 @@ const HomeAdminScreen = () => {
                 <Text style={styles.text}>Valor: R$ {totalValue}</Text>
                 <Text style={styles.text}>Quantidade Total: {totalQuantity} item(s)</Text>
                 <Text style={styles.text}>Token: {item.token_order}</Text>
-                <Text style={[styles.text, item.status_order === 'F' ? styles.finalizedText : styles.cancelledText]}>
-                    Status Pedido: {item.status_order === 'F' ? 'Finalizado' : 'Cancelado'}
+                <Text style={[styles.text, getStatusTextStyle(item.status_order)]}>
+                    Status Pedido: {getStatusText(item.status_order)}
                 </Text>
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity
                         style={[styles.button, styles.finalizeButton]}
                         onPress={() => handleStatus(item, "F")}
-                        disabled={item.status_order == "F"}
+                        disabled={item.status_order === "F"}
                     >
                         <Text style={styles.buttonText}>Finalizar</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={[styles.button, styles.cancelButton]}
                         onPress={() => handleStatus(item, "C")}
-                        disabled={item.status_order == "C"}
+                        disabled={item.status_order === "C"}
                     >
                         <Text style={styles.buttonText}>Cancelar</Text>
                     </TouchableOpacity>
@@ -147,6 +169,9 @@ const styles = StyleSheet.create({
     },
     cancelledText: {
         color: "red",
+    },
+    inProgressText: {
+        color: "#c4a600",
     },
     buttonContainer: {
         flexDirection: "row",
