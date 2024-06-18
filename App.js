@@ -13,6 +13,7 @@ import CartScreen from "./src/views/Cart/CartScreen.js";
 import ProfileScreen from "./src/views/Profile/ProfileScreen.js";
 
 import { AuthProvider, useAuth } from './src/components/Auth/AuthContext.js';
+import { CartProvider } from "./src/components/Cart/CartContext.js";
 
 // Definindo o Buffer globalmente se não estiver definido (para compatibilidade)
 if (typeof window !== 'undefined') {
@@ -100,6 +101,8 @@ function App() {
 
 export default () => (
     <AuthProvider>
-        <App />
+        <CartProvider>
+            <App />
+        </CartProvider>
     </AuthProvider>
 );
