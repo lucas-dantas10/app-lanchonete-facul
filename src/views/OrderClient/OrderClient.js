@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, Alert } from "react-native";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import * as Animatable from 'react-native-animatable';
+import api from "../../../api";
 
 const UserOrderScreen = () => {
     const [order, setOrder] = useState(null);
@@ -9,25 +10,55 @@ const UserOrderScreen = () => {
     const [orderToken, setOrderToken] = useState("");
 
     useEffect(() => {
+        // const fakeOrder = {
+        //     user: { name: "John Doe" },
+        //     item_order: [
+        //         { product: { name: "Hambúrguer", image_path: "https://example.com/hamburguer.png" }, quantity: 2, price_unit: 15.0 },
+        //         { product: { name: "Batata Frita", image_path: "https://example.com/batatafrita.png" }, quantity: 1, price_unit: 10.0 },
+        //         { product: { name: "Refrigerante", image_path: "https://example.com/refrigerante.png" }, quantity: 3, price_unit: 5.0 }
+        //     ],
+        //     status: "Preparando", 
+        //     token_order: "12345ABC"
+        // };
 
-        const fakeOrder = {
-            user: { name: "John Doe" },
-            item_order: [
-                { product: { name: "Hambúrguer", image_path: "https://example.com/hamburguer.png" }, quantity: 2, price_unit: 15.0 },
-                { product: { name: "Batata Frita", image_path: "https://example.com/batatafrita.png" }, quantity: 1, price_unit: 10.0 },
-                { product: { name: "Refrigerante", image_path: "https://example.com/refrigerante.png" }, quantity: 3, price_unit: 5.0 }
-            ],
-            status: "Preparando", 
-            token_order: "12345ABC"
-        };
+        fetchOrders();
+    });
 
-        setOrder(fakeOrder);
-        setOrderToken(fakeOrder.token_order);
-        setLoading(false);
-    }, []);
+    function fetchOrders() {
+        api.get('/orders/client')
+            .then(({data}) => {
+                if (data.orders == null) {
+                    setOrder(null);
+                }
+
+                setOrder(data.orders[0]);
+                setOrderToken(data.orders[0].token_order)
+            })
+            .finally(() => setLoading(false));
+    }
 
     const cancelOrder = () => {
-        setOrder(null);
+        api.put(`/orders/status/${order.id}`, {
+            status_type: "C",
+        })
+            .then(() => {
+                fetchOrders();
+                Alert.alert("Poxa!", "Pedido cancelado :(", [
+                    {
+                        text: "OK",
+                        onPress: () => console.log("OK Pressed"),
+                    },
+                ]);
+            })
+            .catch((err) => {
+                console.log(err)
+                Alert.alert("Erro", "Erro ao alterar o status do pedido!", [
+                    {
+                        text: "OK",
+                        onPress: () => console.log("OK Pressed"),
+                    },
+                ]);
+            });
     };
 
     if (loading) {
@@ -46,8 +77,8 @@ const UserOrderScreen = () => {
         );
     }
 
-    const totalQuantity = order.item_order.reduce((sum, current) => sum + current.quantity, 0);
-    const totalValue = order.item_order.reduce(
+    const totalQuantity = !order ? [] : order.item_order.reduce((sum, current) => sum + current.quantity, 0);
+    const totalValue =  !order ? [] : order.item_order.reduce(
         (sum, current) => sum + current.quantity * current.price_unit,
         0
     );
@@ -76,11 +107,11 @@ const UserOrderScreen = () => {
                 <Text style={styles.totalText}>Valor Total: R${totalValue.toFixed(2)}</Text>
                 <Text style={styles.totalText}>Quantidade Total: {totalQuantity} item(s)</Text>
                 <View style={styles.statusContainer}>
-                    {order.status === "Pronto" ? (
+                    {order.status_order === "D" ? (
                         <Animatable.View animation="bounceIn">
                             <Icon name="check-circle" size={30} color="green" />
                         </Animatable.View>
-                    ) : order.status === "Preparando" ? (
+                    ) : order.status_order === null ? (
                         <Animatable.View animation="rotate" iterationCount="infinite" duration={1000}>
                             <Icon name="hourglass-empty" size={30} color="#FFC72C" />
                         </Animatable.View>
@@ -89,13 +120,13 @@ const UserOrderScreen = () => {
                             <Icon name="cancel" size={30} color="red" />
                         </Animatable.View>
                     )}
-                    <Text style={[styles.statusText, { color: order.status === "Pronto" ? "green" : order.status === "Preparando" ? "#FFC72C" : "red" }]}>
-                        {order.status}{order.status === "Cancelado" && ": Dirija-se à recepção"}
+                    <Text style={[styles.statusText, { color: order.status_order === "D" ? "green" : order.status_order === null ? "#FFC72C" : "red" }]}>
+                        {order.status_order == "C" ? "Cancelado" : order.status_order == "D" ? "Pronto" : "Preparando"}{order.status_order === "C" && ": Dirija-se à recepção"}
                     </Text>
                 </View>
                 <Text style={styles.tokenText}>Token do Pedido: {orderToken}</Text>
-                {order.status !== "Cancelado" && (
-                    <TouchableOpacity onPress={cancelOrder} style={styles.cancelButton}>
+                {order.status !== "C" && (
+                    <TouchableOpacity onPress={cancelOrder} style={styles.cancelButton} disabled={order.status_order == "C"}>
                         <Text style={styles.cancelButtonText}>Cancelar Pedido</Text>
                     </TouchableOpacity>
                 )}

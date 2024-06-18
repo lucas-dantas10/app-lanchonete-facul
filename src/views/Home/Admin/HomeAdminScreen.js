@@ -20,7 +20,7 @@ const HomeAdminScreen = () => {
                 ]);
             })
             .catch((err) => {
-                console.log(err)
+                console.log(err);
                 Alert.alert("Erro", "Erro ao alterar o status do pedido!", [
                     {
                         text: "OK",
@@ -55,10 +55,12 @@ const HomeAdminScreen = () => {
 
         const getStatusText = (status) => {
             switch (status) {
-                case 'F':
-                    return 'Finalizado';
+                case 'D':
+                    return 'Pronto';
                 case 'C':
                     return 'Cancelado';
+                case 'E':
+                    return 'Encerrado';
                 default:
                     return 'Em andamento';
             }
@@ -66,10 +68,12 @@ const HomeAdminScreen = () => {
 
         const getStatusTextStyle = (status) => {
             switch (status) {
-                case 'F':
-                    return styles.finalizedText;
+                case 'D':
+                    return styles.doneText;
                 case 'C':
                     return styles.cancelledText;
+                case 'E':
+                    return styles.encerredText;
                 default:
                     return styles.inProgressText;
             }
@@ -79,7 +83,8 @@ const HomeAdminScreen = () => {
             <View
                 style={[
                     styles.orderContainer,
-                    item.status_order === 'C' && styles.cancelledOrderContainer
+                    item.status_order === 'C' && styles.cancelledOrderContainer,
+                    item.status_order === 'E' && styles.closedOrderContainer,
                 ]}
             >
                 <Text style={styles.text}>Cliente: {item.user.name}</Text>
@@ -93,10 +98,10 @@ const HomeAdminScreen = () => {
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity
                         style={[styles.button, styles.finalizeButton]}
-                        onPress={() => handleStatus(item, "F")}
-                        disabled={item.status_order === "F"}
+                        onPress={() => handleStatus(item, "D")}
+                        disabled={item.status_order === "D"}
                     >
-                        <Text style={styles.buttonText}>Finalizar</Text>
+                        <Text style={styles.buttonText}>Pronto</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={[styles.button, styles.cancelButton]}
@@ -104,6 +109,13 @@ const HomeAdminScreen = () => {
                         disabled={item.status_order === "C"}
                     >
                         <Text style={styles.buttonText}>Cancelar</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={[styles.button, styles.closeButton]}
+                        onPress={() => handleStatus(item, "E")}
+                        disabled={item.status_order === "E"}
+                    >
+                        <Text style={styles.buttonText}>Encerrar</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -159,13 +171,19 @@ const styles = StyleSheet.create({
     cancelledOrderContainer: {
         borderLeftColor: "#f44336",
     },
+    closedOrderContainer: {
+        borderLeftColor: "grey",
+    },
     text: {
         fontSize: 18,
         color: "#333",
         marginBottom: 5,
     },
-    finalizedText: {
+    doneText: {
         color: "green",
+    },
+    encerredText: {
+        color: "grey",
     },
     cancelledText: {
         color: "red",
@@ -190,6 +208,9 @@ const styles = StyleSheet.create({
     },
     cancelButton: {
         backgroundColor: "#f44336",
+    },
+    closeButton: {
+        backgroundColor: "grey",
     },
     buttonText: {
         color: "#fff",
