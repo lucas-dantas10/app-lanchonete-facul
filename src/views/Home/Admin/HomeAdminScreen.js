@@ -1,40 +1,86 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import api from "../../../../api";
 
 const HomeAdminScreen = () => {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    function handleStatus(order, status) {
+        api.put(`/orders/status/${order.id}`, {
+            status_type: status,
+        })
+            .then(() => {
+                fetchOrders();
+                Alert.alert("Sucesso", "Status do pedido alterado!", [
+                    {
+                        text: "OK",
+                        onPress: () => console.log("OK Pressed"),
+                    },
+                ]);
+            })
+            .catch((err) => {
+                console.log(err)
+                Alert.alert("Erro", "Erro ao alterar o status do pedido!", [
+                    {
+                        text: "OK",
+                        onPress: () => console.log("OK Pressed"),
+                    },
+                ]);
+            });
+    }
+
     useEffect(() => {
+        fetchOrders();
+    }, []);
+
+    function fetchOrders() {
         api.get("/orders")
             .then(({ data }) => {
                 setOrders(data.orders);
                 setLoading(false);
             })
             .catch((err) => setLoading(false));
-    }, []);
+    }
 
     const renderOrder = ({ item }) => {
         const totalQuantity = item.item_order.reduce((sum, current) => sum + current.quantity, 0);
-        const productsWithQuantities = item.item_order.map((item) => `${item.product.name} (${item.quantity})`).join(", ");
+        const productsWithQuantities = item.item_order
+            .map((item) => `${item.product.name} (${item.quantity})`)
+            .join(", ");
         const totalValue = item.item_order.reduce(
             (sum, current) => sum + current.quantity * current.price_unit,
             0
         );
 
         return (
-            <View style={styles.orderContainer}>
+            <View
+                style={[
+                    styles.orderContainer,
+                    item.status_order === 'C' && styles.cancelledOrderContainer
+                ]}
+            >
                 <Text style={styles.text}>Cliente: {item.user.name}</Text>
                 <Text style={styles.text}>Lanche(s): {productsWithQuantities}</Text>
                 <Text style={styles.text}>Valor: R$ {totalValue}</Text>
                 <Text style={styles.text}>Quantidade Total: {totalQuantity} item(s)</Text>
                 <Text style={styles.text}>Token: {item.token_order}</Text>
+                <Text style={[styles.text, item.status_order === 'F' ? styles.finalizedText : styles.cancelledText]}>
+                    Status Pedido: {item.status_order === 'F' ? 'Finalizado' : 'Cancelado'}
+                </Text>
                 <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={[styles.button, styles.finalizeButton]}>
+                    <TouchableOpacity
+                        style={[styles.button, styles.finalizeButton]}
+                        onPress={() => handleStatus(item, "F")}
+                        disabled={item.status_order == "F"}
+                    >
                         <Text style={styles.buttonText}>Finalizar</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.button, styles.cancelButton]}>
+                    <TouchableOpacity
+                        style={[styles.button, styles.cancelButton]}
+                        onPress={() => handleStatus(item, "C")}
+                        disabled={item.status_order == "C"}
+                    >
                         <Text style={styles.buttonText}>Cancelar</Text>
                     </TouchableOpacity>
                 </View>
@@ -88,10 +134,19 @@ const styles = StyleSheet.create({
         borderLeftWidth: 5,
         borderLeftColor: "#4caf50",
     },
+    cancelledOrderContainer: {
+        borderLeftColor: "#f44336",
+    },
     text: {
         fontSize: 18,
         color: "#333",
         marginBottom: 5,
+    },
+    finalizedText: {
+        color: "green",
+    },
+    cancelledText: {
+        color: "red",
     },
     buttonContainer: {
         flexDirection: "row",
