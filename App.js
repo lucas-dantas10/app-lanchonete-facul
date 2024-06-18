@@ -11,6 +11,7 @@ import HomeClientScreen from "./src/views/Home/Client/HomeClientScreen.js";
 import HomeAdminScreen from "./src/views/Home/Admin/HomeAdminScreen.js";
 import CartScreen from "./src/views/Cart/CartScreen.js";
 import ProfileScreen from "./src/views/Profile/ProfileScreen.js";
+import OrderClient from "./src/views/OrderClient/OrderClient.js";
 
 import { AuthProvider, useAuth } from './src/components/Auth/AuthContext.js';
 import { CartProvider } from "./src/components/Cart/CartContext.js";
@@ -51,6 +52,13 @@ function ClientTabNavigator() {
                     tabBarIcon: ({ color, size }) => <Feather name="shopping-cart" color={color} size={size} />,
                 }}
             />
+                <Tab.Screen
+                    name="Meus Pedidos"
+                    component={OrderClient}
+                    options={{
+                        tabBarIcon: ({ color, size }) => <Feather name="list" color={color} size={size} />,
+                    }}
+                />
             <Tab.Screen
                 name="Perfil"
                 component={ProfileScreen}
