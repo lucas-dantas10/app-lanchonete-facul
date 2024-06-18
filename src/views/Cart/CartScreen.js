@@ -39,10 +39,14 @@ const CartScreen = () => {
 
   const renderItem = ({ item }) => (
     <View style={styles.itemContainer}>
-        <Image source={item.product.image_path} style={{ width: 50, height: 50, marginRight: 10 }} />
-        <Text style={styles.itemName}>{item.product.name}</Text>
-        <Text style={styles.itemDetails}>Quantidade: {item.quantity}</Text>
-        <Text style={styles.itemDetails}>Preço: R${item.product.price.toFixed(2)}</Text>
+        <View>
+            <Image source={{uri: item.product.image_path}} style={{ width: 50, height: 50, marginRight: 10 }} />
+        </View>
+        <View>
+            <Text style={styles.itemName}>{item.product.name}</Text>
+            <Text style={styles.itemDetails}>Quantidade: {item.quantity}</Text>
+            <Text style={styles.itemDetails}>Preço: R${item.product.price.toFixed(2)}</Text>
+        </View>        
     </View>
   );
 
@@ -81,6 +85,9 @@ const styles = StyleSheet.create({
     padding: 16,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
+    display: 'flex',
+    flexDirection: 'row',
+    marginTop: 40
   },
   itemName: {
     fontSize: 18,

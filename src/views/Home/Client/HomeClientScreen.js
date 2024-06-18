@@ -68,7 +68,7 @@ const HomeClientScreen = () => {
 
     const renderProducts = ({ item }) => (
         <Animated.View style={[styles.itemContainer, { opacity: fadeAnim }]}>
-            <Image source={item.image_path} style={styles.itemImage} />
+            <Image source={{uri: item.image_path}} style={styles.itemImage} />
             <Text style={styles.itemName}>{item.name}</Text>
             <Text style={styles.itemDetails}>R$ {item.price.toFixed(2)}</Text>
             <View style={styles.quantityContainer}>
