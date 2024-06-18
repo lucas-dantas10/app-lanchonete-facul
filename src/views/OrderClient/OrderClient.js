@@ -10,29 +10,21 @@ const UserOrderScreen = () => {
     const [orderToken, setOrderToken] = useState("");
 
     useEffect(() => {
-        // const fakeOrder = {
-        //     user: { name: "John Doe" },
-        //     item_order: [
-        //         { product: { name: "Hambúrguer", image_path: "https://example.com/hamburguer.png" }, quantity: 2, price_unit: 15.0 },
-        //         { product: { name: "Batata Frita", image_path: "https://example.com/batatafrita.png" }, quantity: 1, price_unit: 10.0 },
-        //         { product: { name: "Refrigerante", image_path: "https://example.com/refrigerante.png" }, quantity: 3, price_unit: 5.0 }
-        //     ],
-        //     status: "Preparando", 
-        //     token_order: "12345ABC"
-        // };
-
         fetchOrders();
-    });
+        const interval = setInterval(fetchOrders, 2000);
+
+        return () => clearInterval(interval);
+    }, []);
 
     function fetchOrders() {
         api.get('/orders/client')
-            .then(({data}) => {
+            .then(({ data }) => {
                 if (data.orders == null) {
                     setOrder(null);
+                } else {
+                    setOrder(data.orders[0]);
+                    setOrderToken(data.orders[0].token_order);
                 }
-
-                setOrder(data.orders[0]);
-                setOrderToken(data.orders[0].token_order)
             })
             .finally(() => setLoading(false));
     }
@@ -51,7 +43,7 @@ const UserOrderScreen = () => {
                 ]);
             })
             .catch((err) => {
-                console.log(err)
+                console.log(err);
                 Alert.alert("Erro", "Erro ao alterar o status do pedido!", [
                     {
                         text: "OK",
@@ -77,11 +69,8 @@ const UserOrderScreen = () => {
         );
     }
 
-    const totalQuantity = !order ? [] : order.item_order.reduce((sum, current) => sum + current.quantity, 0);
-    const totalValue =  !order ? [] : order.item_order.reduce(
-        (sum, current) => sum + current.quantity * current.price_unit,
-        0
-    );
+    const totalQuantity = order.item_order.reduce((sum, current) => sum + current.quantity, 0);
+    const totalValue = order.item_order.reduce((sum, current) => sum + current.quantity * current.price_unit, 0);
 
     const renderItem = ({ item }) => (
         <View style={styles.itemContainer}>
@@ -126,7 +115,7 @@ const UserOrderScreen = () => {
                 </View>
                 <Text style={styles.tokenText}>Token do Pedido: {orderToken}</Text>
                 {order.status !== "C" && (
-                    <TouchableOpacity onPress={cancelOrder} style={styles.cancelButton} disabled={order.status_order == "C"}>
+                    <TouchableOpacity onPress={cancelOrder} style={styles.cancelButton} disabled={order.status_order == "D"}>
                         <Text style={styles.cancelButtonText}>Cancelar Pedido</Text>
                     </TouchableOpacity>
                 )}

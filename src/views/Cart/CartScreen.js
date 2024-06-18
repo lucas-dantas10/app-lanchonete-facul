@@ -33,8 +33,6 @@ const CartScreen = () => {
         return 0;
     }
 
-    console.log(cartItems)
-
     return cartItems.reduce((sum, item) => sum + (item.product.price * item.quantity), 0).toFixed(2);
   };
 

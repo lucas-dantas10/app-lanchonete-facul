@@ -32,6 +32,9 @@ const HomeAdminScreen = () => {
 
     useEffect(() => {
         fetchOrders();
+        const interval = setInterval(fetchOrders, 2000);
+
+        return () => clearInterval(interval);
     }, []);
 
     function fetchOrders() {
