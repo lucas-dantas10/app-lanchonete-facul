@@ -47,12 +47,27 @@ export const CartProvider = ({ children }) => {
         setCartItems([]);
     }
 
+    const removeFromCart = async (cartId) => {
+        api.delete(`/cart/delete/${cartId}`)
+            .then(() => {
+                fetchCartItems();
+            })
+            .catch(() => {
+                Alert.alert(
+                    "Erro!",
+                    "Erro ao remover item do carrinho!",
+                    [{ text: "OK", onPress: () => console.log("Alerta de erro fechado") }],
+                    { cancelable: false }
+                );
+            });
+    }
+
     useEffect(() => {
         fetchCartItems();
     }, []);
 
     return (
-        <CartContext.Provider value={{ cartItems, loading, fetchCartItems, addToCart, cleanCart }}>
+        <CartContext.Provider value={{ cartItems, loading, fetchCartItems, addToCart, cleanCart, removeFromCart }}>
             {children}
         </CartContext.Provider>
     );

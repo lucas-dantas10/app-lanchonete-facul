@@ -2,9 +2,10 @@ import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
 import api from '../../../api';
 import { useCart } from '../../components/Cart/CartContext';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const CartScreen = () => {
-  const { cartItems, loading, cleanCart } = useCart();
+  const { cartItems, loading, cleanCart, removeFromCart } = useCart();
 
   const handleSubmit = async () => {
     api.post('/orders/create')
@@ -37,16 +38,23 @@ const CartScreen = () => {
     return cartItems.reduce((sum, item) => sum + (item.product.price * item.quantity), 0).toFixed(2);
   };
 
+  const handleRemoveItem = (itemId) => {
+    removeFromCart(itemId);
+  }
+
   const renderItem = ({ item }) => (
     <View style={styles.itemContainer}>
         <View>
             <Image source={{uri: item.product.image_path}} style={{ width: 50, height: 50, marginRight: 10 }} />
         </View>
-        <View>
+        <View style={styles.itemDetailsContainer}>
             <Text style={styles.itemName}>{item.product.name}</Text>
             <Text style={styles.itemDetails}>Quantidade: {item.quantity}</Text>
             <Text style={styles.itemDetails}>Preço: R${item.product.price.toFixed(2)}</Text>
-        </View>        
+        </View>
+        <TouchableOpacity onPress={() => handleRemoveItem(item.id)}>
+            <Icon name="delete" size={30} color="red" />
+        </TouchableOpacity>
     </View>
   );
 
@@ -85,9 +93,14 @@ const styles = StyleSheet.create({
     padding: 16,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
-    display: 'flex',
     flexDirection: 'row',
-    marginTop: 40
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 40,
+  },
+  itemDetailsContainer: {
+    flex: 1,
+    marginLeft: 10,
   },
   itemName: {
     fontSize: 18,
