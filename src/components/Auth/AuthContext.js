@@ -38,21 +38,22 @@ export const AuthProvider = ({ children }) => {
     const logout = async () => {
         api.post("/logout")
             .then(async ({ data }) => {
+                console.log(data);
                 await AsyncStorage.removeItem("user");
                 await AsyncStorage.removeItem("token");
-
-                setIsLoggedIn(false);
-                setIsAdmin(false);
-
-                // await navigation.navigate("Login");
             })
-            .catch(() => {
+            .catch((err) => {
+                console.log(err);
                 Alert.alert("Erro", "Erro ao sair da conta!", [
                     {
                         text: "OK",
                         onPress: () => console.log("OK Pressed"),
                     },
                 ]);
+            })
+            .finally(() => {
+                setIsLoggedIn(false);
+                setIsAdmin(false);
             });
     };
 

@@ -3,12 +3,14 @@ import { View, Text, TextInput, FlatList, Image, TouchableOpacity, StyleSheet, S
 import { Feather } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import api from "../../../../api";
+import { useCart } from "../../../components/Cart/CartContext";
 
 const HomeClientScreen = () => {
     const [items, setItems] = useState("");
     const [loading, setLoading] = useState(true);
     const [fadeAnim] = useState(new Animated.Value(0));
     const [quantities, setQuantities] = useState({});
+    const { addToCart } = useCart(); 
 
     useEffect(() => {
         // const products = [
@@ -53,21 +55,7 @@ const HomeClientScreen = () => {
 
     function addItemInCart(product) {
         const quantity = quantities[product.id] || 1; 
-        console.log(`id: ${product.id} | Adicionar ${quantity} de ${product.name} ao carrinho`);
-
-         api.post('/cart/create', {
-             product_id: product.id,
-             quantity: quantity
-         })
-         .then(({data}) => {
-            Alert.alert(
-                "Sucesso!",
-                "Item adicionado ao carrinho!",
-                [{ text: "OK", onPress: () => console.log("Alerta de erro fechado") }],
-                { cancelable: false }
-            );
-             setLoading(false);
-         });
+        addToCart(product, quantity);
     }
 
     const handleChangeQuantity = (product, value) => {

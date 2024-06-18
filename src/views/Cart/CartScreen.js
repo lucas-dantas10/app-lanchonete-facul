@@ -1,32 +1,48 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
 import api from '../../../api';
+import { useCart } from '../../components/Cart/CartContext';
 
 const CartScreen = () => {
-  // const cartItemsData = require('../../../data/cart/cart.json');
-  const [cartItems, setCartItems] = useState("");
-  const [loading, setLoading] = useState(true);
+  const { cartItems, loading, cleanCart } = useCart();
 
-  useEffect(() => {
-    api.get('/cart/items')
-        .then(({ data }) => {
-            console.log(data);
-            setCartItems(data.cartItems);
-            setLoading(false);
+  const handleSubmit = async () => {
+    api.post('/orders/create')
+        .then(({data}) => {
+            cleanCart();
+            Alert.alert(
+                "Pedido Criado!",
+                "Agora é só chegar e pegar ;)",
+                [{ text: "OK", onPress: () => console.log("Alerta de erro fechado") }],
+                { cancelable: false }
+            );
         })
-        .catch((err) => setLoading(false));
-  }, []);
+        .catch(() => {
+            Alert.alert(
+                "Erro!",
+                "Ocorreu um erro ao gerar o pedido :(",
+                [{ text: "OK", onPress: () => console.log("Alerta de erro fechado") }],
+                { cancelable: false }
+            );
+        })
+  }
 
-  // const calculateTotal = () => {
-  //   return cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0).toFixed(2);
-  // };
+  const calculateTotal = () => {
+    if (!cartItems) {
+        return 0;
+    }
+
+    console.log(cartItems)
+
+    return cartItems.reduce((sum, item) => sum + (item.product.price * item.quantity), 0).toFixed(2);
+  };
 
   const renderItem = ({ item }) => (
     <View style={styles.itemContainer}>
-      <Image source={item.product.image_path} style={{ width: 50, height: 50, marginRight: 10 }} />
-      <Text style={styles.itemName}>{item.product.name}</Text>
-      <Text style={styles.itemDetails}>Quantidade: {item.quantity}</Text>
-      <Text style={styles.itemDetails}>Preço: R${item.product.price.toFixed(2)}</Text>
+        <Image source={item.product.image_path} style={{ width: 50, height: 50, marginRight: 10 }} />
+        <Text style={styles.itemName}>{item.product.name}</Text>
+        <Text style={styles.itemDetails}>Quantidade: {item.quantity}</Text>
+        <Text style={styles.itemDetails}>Preço: R${item.product.price.toFixed(2)}</Text>
     </View>
   );
 
@@ -43,11 +59,11 @@ const CartScreen = () => {
       <FlatList
         data={cartItems}
         renderItem={renderItem}
-        keyExtractor={item => item.id}
+        keyExtractor={item => item.id.toString()}
       />
       <View style={styles.totalContainer}>
-        {/* <Text style={styles.totalText}>Total: R${calculateTotal()}</Text> */}
-        <TouchableOpacity style={styles.checkoutButton}>
+        <Text style={styles.totalText}>Total: R${calculateTotal()}</Text>
+        <TouchableOpacity style={styles.checkoutButton} onPress={handleSubmit}>
           <Text style={styles.checkoutButtonText}>Finalizar Compra</Text>
         </TouchableOpacity>
       </View>
@@ -78,6 +94,7 @@ const styles = StyleSheet.create({
     padding: 16,
     borderTopWidth: 1,
     borderTopColor: '#ccc',
+    alignItems: 'center',
   },
   totalText: {
     fontSize: 18,
@@ -93,6 +110,11 @@ const styles = StyleSheet.create({
   checkoutButtonText: {
     color: '#fff',
     fontSize: 18,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
