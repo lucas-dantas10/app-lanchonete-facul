@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, Alert } from
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import * as Animatable from 'react-native-animatable';
 import api from "../../../api";
+import LoginPNG from "../../../assets/LogoLogin.png";
 
 const UserOrderScreen = () => {
     const [order, setOrder] = useState(null);
@@ -56,7 +57,16 @@ const UserOrderScreen = () => {
     if (loading) {
         return (
             <View style={styles.loadingContainer}>
-                <Text style={styles.loadingText}>Carregando...</Text>
+                <Animatable.Image
+                    animation="pulse"
+                    easing="ease-out"
+                    iterationCount="infinite"
+                    style={{width: "50%",
+                        height: 200,
+                        marginBottom: 20}}
+                    source={LoginPNG}
+                    resizeMode="contain"
+                />
             </View>
         );
     }

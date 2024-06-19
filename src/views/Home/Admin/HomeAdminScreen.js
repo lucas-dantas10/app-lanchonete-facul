@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import api from "../../../../api";
+import LoginPNG from "../../../../assets/LogoLogin.png";
 
 const HomeAdminScreen = () => {
     const [orders, setOrders] = useState([]);
@@ -128,7 +129,16 @@ const HomeAdminScreen = () => {
     if (loading) {
         return (
             <View style={styles.loadingContainer}>
-                <Text>Carregando...</Text>
+                <Animatable.Image
+                    animation="pulse"
+                    easing="ease-out"
+                    iterationCount="infinite"
+                    style={{width: "50%",
+                        height: 200,
+                        marginBottom: 20}}
+                    source={LoginPNG}
+                    resizeMode="contain"
+                />
             </View>
         );
     }

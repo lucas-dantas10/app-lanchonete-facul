@@ -4,6 +4,8 @@ import { Feather } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import api from "../../../../api";
 import { useCart } from "../../../components/Cart/CartContext";
+import LoginPNG from "../../../../assets/LogoLogin.png";
+import * as Animatable from "react-native-animatable";
 
 const HomeClientScreen = () => {
     const [items, setItems] = useState([]);
@@ -18,7 +20,7 @@ const HomeClientScreen = () => {
                  setItems(data.products);
                  setLoading(false);
              })
-             .catch((err) => setLoading(false));
+             .finally(() => setLoading(false));
 
          Animated.timing(fadeAnim, {
              toValue: 1,
@@ -63,7 +65,16 @@ const HomeClientScreen = () => {
     if (loading) {
         return (
             <View style={styles.loadingContainer}>
-                <Text>Carregando...</Text>
+                <Animatable.Image
+                    animation="pulse"
+                    easing="ease-out"
+                    iterationCount="infinite"
+                    style={{width: "50%",
+                        height: 200,
+                        marginBottom: 20}}
+                    source={LoginPNG}
+                    resizeMode="contain"
+                />
             </View>
         );
     }
