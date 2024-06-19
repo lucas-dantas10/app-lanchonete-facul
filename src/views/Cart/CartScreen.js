@@ -90,6 +90,7 @@ const CartScreen = () => {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>Carrinho</Text>
       <FlatList
         data={cartItems}
         renderItem={renderItem}
@@ -111,10 +112,17 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: "#fff",
   },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginVertical: 16,
+    marginTop:30,
+  },
   itemContainer: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "center",
     padding: 16,
     borderBottomWidth: 1,
     borderBottomColor: "#ccc",
@@ -132,10 +140,12 @@ const styles = StyleSheet.create({
   itemName: {
     fontSize: 18,
     fontWeight: "bold",
+    textAlign: "center",
   },
   itemDetails: {
     fontSize: 16,
     marginTop: 4,
+    textAlign: "center",
   },
   totalContainer: {
     padding: 16,

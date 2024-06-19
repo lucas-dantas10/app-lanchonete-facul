@@ -73,7 +73,7 @@ const HomeClientScreen = () => {
             <View style={styles.container}>
                 <SafeAreaView>
                     <Text style={styles.textPromocao}>Promoção</Text>
-                    <TouchableOpacity>
+                    <View>
                         <View style={styles.promocao}>
                             <View style={styles.infoPromo}>
                                 <View style={styles.ofertaContainer}>
@@ -83,7 +83,7 @@ const HomeClientScreen = () => {
                                 <Image style={styles.imageCombo} source={require("../../../../assets/products/combo.jpg")} />
                             </View>
                         </View>
-                    </TouchableOpacity>
+                    </View>
                 </SafeAreaView>
 
                 <View>
@@ -112,26 +112,31 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     textPromocao: {
-        fontWeight: "bold",
         fontSize: 24,
-        padding: 10,
+        fontWeight: "bold",
+        margin: 10,
         color: "#333",
     },
     promocao: {
         backgroundColor: "#DA291C",
-        margin: 10,
-        padding: 15,
+        margin: 15,
+        padding: 10,
         borderRadius: 10,
         shadowColor: "#000",
         shadowOffset: { width: 0, height: 3 },
         shadowOpacity: 0.17,
         shadowRadius: 3.05,
         elevation: 4,
+        
     },
     infoPromo: {
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
+        fontSize: 24,
+        fontWeight: "bold",
+        margin: 10,
+        color: "#333",
     },
     ofertaContainer: {
         display: "flex",
@@ -160,7 +165,7 @@ const styles = StyleSheet.create({
     textCardapio: {
         fontSize: 24,
         fontWeight: "bold",
-        margin: 10,
+        marginBottom:10,
         color: "#333",
     },
     containerCardapio: {
