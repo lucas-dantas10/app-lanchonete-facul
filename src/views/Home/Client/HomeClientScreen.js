@@ -1,44 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TextInput, FlatList, Image, TouchableOpacity, StyleSheet, ScrollView, Animated, Alert } from "react-native";
+import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet, ScrollView, Animated, Alert } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import api from "../../../../api";
 import { useCart } from "../../../components/Cart/CartContext";
 
 const HomeClientScreen = () => {
-    const [items, setItems] = useState("");
+    const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [fadeAnim] = useState(new Animated.Value(0));
     const [quantities, setQuantities] = useState({});
     const { addToCart } = useCart(); 
 
     useEffect(() => {
-        // const products = [
-        //     {
-        //         id: 1,
-        //         name: "Biscoito de Polvilho",
-        //         description: "Biscoito de Polvilho Salgado",
-        //         image_path: require("../../../../assets/products/sacole.png"),
-        //         price: 3
-        //     },
-        //     {
-        //         id: 2,
-        //         name: "Biscoito de Polvilho",
-        //         description: "Biscoito de Polvilho Salgado",
-        //         image_path: require("../../../../assets/products/sacole.png"),
-        //         price: 3
-        //     },
-        //     {
-        //         id: 3,
-        //         name: "Biscoito de Polvilho",
-        //         description: "Biscoito de Polvilho Salgado",
-        //         image_path: require("../../../../assets/products/sacole.png"),
-        //         price: 3
-        //     },
-        //     // ... (outros produtos)
-        // ];
-        // setItems(products);
-        // setLoading(false);
          api.get('/products')
              .then(({ data }) => {
                  setItems(data.products);
@@ -81,7 +55,7 @@ const HomeClientScreen = () => {
                 </TouchableOpacity>
             </View>
             <TouchableOpacity onPress={() => addItemInCart(item)} style={styles.addButton}>
-            <Image style={styles.itemAddImage} source={require("../../../../assets/mais.png")} />
+                <Feather name="plus" size={24} color="#fff" />
             </TouchableOpacity>
         </Animated.View>
     );
@@ -228,11 +202,6 @@ const styles = StyleSheet.create({
         marginTop: 10,
         alignItems: "center",
     },
-    addButtonText: {
-        color: "#fff",
-        fontSize: 16,
-        fontWeight: "bold",
-    },
     quantityContainer: {
         flexDirection: "row",
         alignItems: "center",
@@ -251,10 +220,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-    },
-    itemAddImage: {
-        width: 25,
-        height: 25,
     },
 });
 
