@@ -110,7 +110,7 @@ const UserOrderScreen = () => {
                         </Animatable.View>
                     )}
                     <Text style={[styles.statusText, { color: order.status_order === "D" ? "green" : order.status_order === null ? "#FFC72C" : "red" }]}>
-                        {order.status_order == "C" ? "Cancelado" : order.status_order == "D" ? "Pronto" : "Preparando"}{order.status_order === "C" && ": Dirija-se à recepção"}
+                        {order.status_order == "C" ? "Cancelado" : order.status_order == "D" ? "Pronto" : "Preparando"}{order.status_order === "C" && ": Dirija-se à cantina"}
                     </Text>
                 </View>
                 <Text style={styles.tokenText}>Token do Pedido: {orderToken}</Text>

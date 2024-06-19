@@ -37,8 +37,28 @@ const ProfileScreen = ({navigation}) => {
     });
 
     if (!result.canceled) {
-      console.log(result.assets[0].uri);
-      setProfileImage(result.assets[0].uri);
+        const uri = result.assets[0].uri;
+        const type = result.assets[0].type;
+        const name = uri.split('/').pop();
+    
+        const formData = new FormData();
+        formData.append('image', {
+            uri,
+            type,
+            name,
+        });
+
+        api.post('/user/upload-image', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            }
+        })
+        .then(({ data }) => {
+            setProfileImage(data.image);
+        })
+        .catch((e) => {
+            alert('Erro ao enviar a imagem. Tente novamente.');
+        });
     }
   };
 
