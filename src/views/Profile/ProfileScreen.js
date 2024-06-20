@@ -24,9 +24,7 @@ const ProfileScreen = ({navigation}) => {
     api.get("/orders")
         .then(({ data }) => {
             setOrders(data.orders);
-            setLoading(false);
-        })
-        .catch((err) => setLoading(false));
+        });
 }
 
   async function setUserData() {
