@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import api from "../../../../api";
 import LoginPNG from "../../../../assets/LogoLogin.png";
+import * as Animatable from "react-native-animatable";
 
 const HomeAdminScreen = () => {
     const [orders, setOrders] = useState([]);
@@ -41,10 +42,28 @@ const HomeAdminScreen = () => {
     function fetchOrders() {
         api.get("/orders")
             .then(({ data }) => {
+                console.log(data.orders);
                 setOrders(data.orders);
                 setLoading(false);
             })
             .catch((err) => setLoading(false));
+    }
+
+    const dateFormated = (dateString) => {
+        const date = new Date(dateString);
+
+        const options = {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+        };
+
+        const formattedDate = date.toLocaleDateString('pt-BR', options);
+
+        return formattedDate;
     }
 
     const renderOrder = ({ item }) => {
@@ -96,6 +115,7 @@ const HomeAdminScreen = () => {
                 <Text style={styles.text}>Valor: R$ {totalValue}</Text>
                 <Text style={styles.text}>Quantidade Total: {totalQuantity} item(s)</Text>
                 <Text style={styles.text}>Token: {item.token_order}</Text>
+                <Text style={styles.text}>Data do Pedido: {dateFormated(item.created_at)}</Text>
                 <Text style={[styles.text, getStatusTextStyle(item.status_order)]}>
                     Status Pedido: {getStatusText(item.status_order)}
                 </Text>
