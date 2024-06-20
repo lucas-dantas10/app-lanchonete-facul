@@ -189,12 +189,12 @@ const styles = StyleSheet.create({
     marginTop: 20,
     paddingVertical: 10,
     paddingHorizontal: 20,
-    backgroundColor: '#f00', // Cor de fundo do botão
+    backgroundColor: '#f00', 
     borderRadius: 10,
   },
   logoutText: {
     fontSize: 16,
-    color: '#fff', // Cor do texto do botão
+    color: '#fff', 
     textAlign: 'center',
   },
 });

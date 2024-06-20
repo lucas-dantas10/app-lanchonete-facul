@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import api from "../../../api";
 import {
   StyleSheet,
@@ -18,10 +18,26 @@ import { useAuth } from "../../components/Auth/AuthContext";
 function LoginScreen({ navigation, route }) {
   const [inputUsuario, onChangeUsuario] = useState("");
   const [inputSenha, onChangeSenha] = useState("");
+  const [currentDate, setCurrentDate] = useState("");
   const { login } = useAuth();
 
+  useEffect(() => {
+    const date = new Date();
+    const day = date.getDate();
+    const month = date.getMonth();
+    const year = date.getFullYear();
+    
+    const monthNames = [
+      "janeiro", "fevereiro", "março", "abril", "maio", "junho",
+      "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"
+    ];
+    
+    const formattedDate = `${day} de ${monthNames[month]} de ${year}`;
+    setCurrentDate(formattedDate);
+  }, []);
+
   const handleLogin = async () => {
-    await login (inputUsuario, inputSenha);
+    await login(inputUsuario, inputSenha);
   }
 
   return (
@@ -39,6 +55,7 @@ function LoginScreen({ navigation, route }) {
           source={LoginPNG}
           resizeMode="contain"
         />
+        <Text style={styles.dateText}>{currentDate}</Text>
         <TextInput
           style={styles.input}
           placeholder="Email"
@@ -125,8 +142,13 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   LoginPNG: {
-    width: "80%",
+    width: "100%",
     height: 200,
+    marginBottom: 20,
+  },
+  dateText: {
+    fontSize: 16,
+    color: "#3a3a3a",
     marginBottom: 20,
   },
 });
