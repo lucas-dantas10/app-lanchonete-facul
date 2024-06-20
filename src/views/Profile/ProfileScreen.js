@@ -8,16 +8,37 @@ import { useAuth } from '../../components/Auth/AuthContext';
 const ProfileScreen = ({navigation}) => {
   const [profileImage, setProfileImage] = useState('https://via.placeholder.com/150');
   const [user, setUser] = useState("");
-  const { logout } = useAuth();
+  const [orders, setOrders] = useState([]);
+  const { logout, isAdmin } = useAuth();
 
   useEffect(() => {
     setUserData();
+
+    fetchOrders();
+    const interval = setInterval(fetchOrders, 2000);
+
+    return () => clearInterval(interval);
   }, []);
+
+  function fetchOrders() {
+    api.get("/orders")
+        .then(({ data }) => {
+            setOrders(data.orders);
+            setLoading(false);
+        })
+        .catch((err) => setLoading(false));
+}
 
   async function setUserData() {
     const userData = await AsyncStorage.getItem('user');
     setProfileImage(JSON.parse(userData).image_url);
     setUser(JSON.parse(userData));
+  }
+
+  const ordersPendent = () => {
+    const orderFiltered = orders.filter(order => order.status_order == null);
+
+    return orderFiltered.length;
   }
 
   const selectImage = async () => {
@@ -76,17 +97,23 @@ const ProfileScreen = ({navigation}) => {
 
       <Text style={styles.username}>{user.name}</Text>
 
-      <View style={styles.detailsContainer}>
-        <View style={styles.detailItem}>
-          <Text style={styles.detailLabel}>Escola</Text>
-          <Text style={styles.detailValue}>{user.school}</Text>
-        </View>
-      </View>
-
-      {/* <View style={styles.orderContainer}>
-        <Text style={styles.orderLabel}>Pedido Atual</Text>
-        <Text style={styles.orderContent}>Nenhum pedido no momento</Text>
-      </View> */}
+      {
+        isAdmin ? (
+            <>
+                <View style={styles.orderContainer}>
+                    <Text style={styles.orderLabel}>Pedidos Pendentes</Text>
+                    <Text style={styles.orderContent}>{ordersPendent() == 0 ? "Nenhum pedido no momento" : ordersPendent()}</Text>
+                </View>
+            </>
+        ) : (
+            <View style={styles.detailsContainer}>
+                <View style={styles.detailItem}>
+                <Text style={styles.detailLabel}>Escola</Text>
+                <Text style={styles.detailValue}>{user.school}</Text>
+                </View>
+            </View>
+        )
+      }
 
       <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
         <Text style={styles.logoutText}>Sair da conta</Text>

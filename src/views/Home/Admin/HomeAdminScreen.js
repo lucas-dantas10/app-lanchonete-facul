@@ -42,7 +42,6 @@ const HomeAdminScreen = () => {
     function fetchOrders() {
         api.get("/orders")
             .then(({ data }) => {
-                console.log(data.orders);
                 setOrders(data.orders);
                 setLoading(false);
             })
